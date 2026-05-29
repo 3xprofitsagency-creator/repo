@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ALABIS — Luxury Furniture</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Cormorant', 'Georgia', 'serif'],
+            sans: ['Montserrat', 'sans-serif'],
+          },
+          colors: {
+            stone: {
+              950: '#0C0A09',
+              900: '#1C1917',
+              800: '#292524',
+              700: '#44403C',
+              600: '#57534E',
+              400: '#A8A29E',
+              200: '#E7E5E4',
+              100: '#F5F5F4',
+              50:  '#FAFAF9',
+            },
+            gold: {
+              600: '#92400E',
+              500: '#B45309',
+              400: '#CA8A04',
+              300: '#D97706',
+              200: '#FDE68A',
+              100: '#FEF3C7',
+            }
+          },
+          letterSpacing: {
+            widest: '0.3em',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: #FAFAF9;
+      color: #0C0A09;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---- Navbar ---- */
+    #navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+    }
+    #navbar.scrolled {
+      background: rgba(250,250,249,0.92);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+    }
+
+    /* ---- Hero ---- */
+    .hero-section {
+      height: 100svh;
+      min-height: 680px;
+      position: relative;
+      overflow: hidden;
+      background: #1C1917;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: url('https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=2400&q=85&auto=format&fit=crop') center/cover no-repeat;
+      opacity: 0.55;
+      transform: scale(1.04);
+      transition: transform 8s ease-out;
+    }
+    .hero-bg.loaded { transform: scale(1); }
+
+    .hero-grain {
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    /* Cormorant heading sizes */
+    .display-xl {
+      font-family: 'Cormorant', Georgia, serif;
+      font-size: clamp(3.5rem, 8vw, 9rem);
+      font-weight: 300;
+      line-height: 0.92;
+      letter-spacing: -0.01em;
+    }
+    .display-lg {
+      font-family: 'Cormorant', Georgia, serif;
+      font-size: clamp(2.5rem, 5vw, 6rem);
+      font-weight: 300;
+      line-height: 0.95;
+    }
+    .display-md {
+      font-family: 'Cormorant', Georgia, serif;
+      font-size: clamp(1.8rem, 3vw, 3.5rem);
+      font-weight: 400;
+      line-height: 1.1;
+    }
+
+    .label-xs {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+    }
+
+    /* ---- Product cards ---- */
+    .product-card { position: relative; overflow: hidden; cursor: pointer; }
+    .product-card img { transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+    .product-card:hover img { transform: scale(1.06); }
+    .product-card .card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(12,10,9,0.7) 0%, transparent 55%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .product-card:hover .card-overlay { opacity: 1; }
+    .product-card .card-cta {
+      position: absolute; bottom: 1.5rem; left: 1.5rem; right: 1.5rem;
+      transform: translateY(8px);
+      opacity: 0;
+      transition: all 0.35s ease;
+    }
+    .product-card:hover .card-cta { transform: translateY(0); opacity: 1; }
+
+    /* ---- Gold button ---- */
+    .btn-gold {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #CA8A04;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.875rem 2rem;
+      transition: background 0.25s ease, transform 0.2s ease;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+    }
+    .btn-gold:hover { background: #B45309; transform: translateY(-1px); }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: #0C0A09;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.875rem 2rem;
+      border: 1px solid #0C0A09;
+      transition: background 0.25s ease, color 0.25s ease;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn-outline:hover { background: #0C0A09; color: #FAFAF9; }
+
+    .btn-outline-light {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: #FAFAF9;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.875rem 2rem;
+      border: 1px solid rgba(250,250,249,0.5);
+      transition: background 0.25s ease, border-color 0.25s ease;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn-outline-light:hover { background: rgba(250,250,249,0.1); border-color: #FAFAF9; }
+
+    /* ---- Horizontal scroll strip ---- */
+    .scroll-strip {
+      display: flex;
+      gap: 1.5rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .scroll-strip::-webkit-scrollbar { display: none; }
+    .scroll-strip > * { scroll-snap-align: start; flex-shrink: 0; }
+
+    /* ---- Divider ---- */
+    .divider { height: 1px; background: #E7E5E4; }
+
+    /* ---- Marquee ---- */
+    @keyframes marquee {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .marquee-track { display: flex; width: max-content; animation: marquee 28s linear infinite; }
+    .marquee-track:hover { animation-play-state: paused; }
+
+    /* ---- Fade in on scroll ---- */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ---- Selection ---- */
+    ::selection { background: #CA8A04; color: #fff; }
+
+    /* ---- Focus ---- */
+    :focus-visible { outline: 2px solid #CA8A04; outline-offset: 3px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════
+     NAVIGATION
+════════════════════════════════════ -->
+<nav id="navbar" aria-label="Main navigation">
+  <div class="max-w-screen-2xl mx-auto px-6 md:px-10 py-5 flex items-center justify-between">
+
+    <!-- Left links -->
+    <ul class="hidden lg:flex items-center gap-8" role="list">
+      <li><a href="#collections" class="label-xs text-stone-950 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Collections</a></li>
+      <li><a href="#new-arrivals" class="label-xs text-stone-950 hover:text-gold-400 transition-colors duration-200 cursor-pointer">New Arrivals</a></li>
+      <li><a href="#craftsmanship" class="label-xs text-stone-950 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Craftsmanship</a></li>
+    </ul>
+
+    <!-- Logo -->
+    <a href="#" class="absolute left-1/2 -translate-x-1/2" aria-label="Alabis Furniture Home">
+      <div class="flex flex-col items-center">
+        <span style="font-family:'Cormorant',serif; font-size:1.6rem; font-weight:500; letter-spacing:0.18em; color:#1C1917; line-height:1;">ALABIS</span>
+        <span class="label-xs text-stone-600" style="letter-spacing:0.35em; font-size:0.55rem;">FURNITURE</span>
+      </div>
+    </a>
+
+    <!-- Right actions -->
+    <div class="flex items-center gap-5 ml-auto">
+      <!-- Search -->
+      <button aria-label="Search" class="cursor-pointer text-stone-700 hover:text-gold-400 transition-colors duration-200">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <!-- Wishlist -->
+      <button aria-label="Wishlist" class="hidden sm:block cursor-pointer text-stone-700 hover:text-gold-400 transition-colors duration-200">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </button>
+      <!-- Cart -->
+      <button aria-label="Cart (0 items)" class="cursor-pointer relative text-stone-700 hover:text-gold-400 transition-colors duration-200">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="absolute -top-1.5 -right-1.5 bg-gold-400 text-white rounded-full w-4 h-4 flex items-center justify-center" style="font-size:0.5rem; font-family:'Montserrat',sans-serif; font-weight:600;">0</span>
+      </button>
+      <!-- Mobile menu -->
+      <button aria-label="Open menu" class="lg:hidden cursor-pointer text-stone-700 hover:text-gold-400 transition-colors duration-200">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+
+  </div>
+</nav>
+
+
+<!-- ════════════════════════════════════
+     HERO
+════════════════════════════════════ -->
+<section class="hero-section" aria-label="Hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-grain"></div>
+
+  <!-- Content -->
+  <div class="relative z-10 h-full flex flex-col justify-end pb-16 md:pb-24 px-6 md:px-14 lg:px-20 max-w-screen-2xl mx-auto">
+
+    <div class="max-w-3xl">
+      <p class="label-xs text-gold-300 mb-6">Est. 2010 · Lagos, Nigeria</p>
+      <h1 class="display-xl text-stone-50 mb-6">
+        Crafted<br/>
+        <em style="font-style:italic; font-weight:300;">for the</em><br/>
+        Exceptional
+      </h1>
+      <p class="text-stone-200 text-base md:text-lg font-light leading-relaxed max-w-md mb-10" style="letter-spacing:0.01em;">
+        Heirloom-quality furniture where master artisans and rare materials converge. Every piece tells a story of deliberate restraint.
+      </p>
+      <div class="flex flex-wrap gap-4">
+        <a href="#collections" class="btn-gold">
+          Explore Collections
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#craftsmanship" class="btn-outline-light">Our Story</a>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 right-8 md:right-14 flex flex-col items-center gap-3">
+      <div style="width:1px; height:56px; background:linear-gradient(to bottom, transparent, rgba(250,250,249,0.6));"></div>
+      <span class="label-xs text-stone-300" style="writing-mode:vertical-rl; letter-spacing:0.25em;">Scroll</span>
+    </div>
+
+  </div>
+
+  <!-- Stats strip -->
+  <div class="absolute bottom-0 left-0 right-0 bg-stone-900/70 backdrop-blur-sm border-t border-white/10">
+    <div class="max-w-screen-2xl mx-auto px-6 md:px-14 py-4 grid grid-cols-3 divide-x divide-white/10">
+      <div class="px-4 md:px-8 text-center">
+        <p class="display-md text-stone-50" style="font-size:1.6rem;">14+</p>
+        <p class="label-xs text-stone-400 mt-1">Years Heritage</p>
+      </div>
+      <div class="px-4 md:px-8 text-center">
+        <p class="display-md text-stone-50" style="font-size:1.6rem;">340+</p>
+        <p class="label-xs text-stone-400 mt-1">Bespoke Pieces</p>
+      </div>
+      <div class="px-4 md:px-8 text-center">
+        <p class="display-md text-stone-50" style="font-size:1.6rem;">98%</p>
+        <p class="label-xs text-stone-400 mt-1">Client Satisfaction</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+     MARQUEE STRIP
+════════════════════════════════════ -->
+<div class="bg-gold-400 py-3 overflow-hidden" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="label-xs text-white px-8">Solid Hardwood</span>
+    <span class="text-white/40 px-2">·</span>
+    <span class="label-xs text-white px-8">Hand-Finished</span>
+    <span class="text-white/40 px-2">·</span>
+    <span class="label-xs text-white px-8">Premium Leather</span>
+    <span class="text-white/40 px-2">·</span>
+    <span class="label-xs text-white px-8">Free White-Glove Delivery</span>
+    <span class="text-white/40 px-2">·</span>
+    <span class="label-xs text-white px-8">10-Year Warranty</span>
+    <span class="text-white/40 px-2">·</span>
+    <span class="label-xs text-white px-8">Bespoke Orders Welcome</span>
+    <span class="text-white/40 px-2">·</span>
+    <span class="label-xs text-white px-8">Sustainable Sourcing</span>
+    <span class="text-white/40 px-2">·</span>
+    <!-- duplicate for seamless loop -->
+    <span class="label-xs text-white px-8">Solid Hardwood</span>
+    <span class="text-white/40 px-2">·</span>
+    <span class="label-xs text-white px-8">Hand-Finished</span>
+    <span class="text-white/40 px-2">·</span>
+    <span class="label-xs text-white px-8">Premium Leather</span>
+    <span class="text-white/40 px-2">·</span>
+    <span class="label-xs text-white px-8">Free White-Glove Delivery</span>
+    <span class="text-white/40 px-2">·</span>
+    <span class="label-xs text-white px-8">10-Year Warranty</span>
+    <span class="text-white/40 px-2">·</span>
+    <span class="label-xs text-white px-8">Bespoke Orders Welcome</span>
+    <span class="text-white/40 px-2">·</span>
+    <span class="label-xs text-white px-8">Sustainable Sourcing</span>
+    <span class="text-white/40 px-2">·</span>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════
+     COLLECTIONS
+════════════════════════════════════ -->
+<section id="collections" class="py-24 md:py-32 px-6 md:px-14 lg:px-20 max-w-screen-2xl mx-auto">
+
+  <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
+    <div class="reveal">
+      <p class="label-xs text-gold-400 mb-3">Curated Spaces</p>
+      <h2 class="display-lg text-stone-950">Our Collections</h2>
+    </div>
+    <a href="#" class="btn-outline self-start md:self-auto reveal reveal-delay-2">View All Collections</a>
+  </div>
+
+  <!-- 3-column grid -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+
+    <!-- Collection 1 — tall -->
+    <div class="product-card md:row-span-2 reveal cursor-pointer" style="aspect-ratio:3/4;" tabindex="0" role="button" aria-label="Living Room Collection">
+      <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=900&q=80&auto=format&fit=crop"
+           alt="Elegant living room with cream sofa and walnut coffee table"
+           class="w-full h-full object-cover"
+           loading="lazy" />
+      <div class="card-overlay"></div>
+      <div class="card-cta">
+        <p class="label-xs text-white/70 mb-1">01 / Living</p>
+        <p class="text-white font-serif text-2xl font-light mb-3">Living Room</p>
+        <span class="btn-gold text-xs py-2.5 px-5">Shop Now</span>
+      </div>
+    </div>
+
+    <!-- Collection 2 -->
+    <div class="product-card reveal reveal-delay-1 cursor-pointer" style="aspect-ratio:4/3;" tabindex="0" role="button" aria-label="Bedroom Collection">
+      <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=900&q=80&auto=format&fit=crop"
+           alt="Serene bedroom with upholstered bed frame and linen bedding"
+           class="w-full h-full object-cover"
+           loading="lazy" />
+      <div class="card-overlay"></div>
+      <div class="card-cta">
+        <p class="label-xs text-white/70 mb-1">02 / Bedroom</p>
+        <p class="text-white font-serif text-2xl font-light mb-3">Bedroom</p>
+        <span class="btn-gold text-xs py-2.5 px-5">Shop Now</span>
+      </div>
+    </div>
+
+    <!-- Collection 3 -->
+    <div class="product-card reveal reveal-delay-2 cursor-pointer" style="aspect-ratio:4/3;" tabindex="0" role="button" aria-label="Dining Room Collection">
+      <img src="https://images.unsplash.com/photo-1617806118233-18e1de247200?w=900&q=80&auto=format&fit=crop"
+           alt="Refined dining room with marble table and leather chairs"
+           class="w-full h-full object-cover"
+           loading="lazy" />
+      <div class="card-overlay"></div>
+      <div class="card-cta">
+        <p class="label-xs text-white/70 mb-1">03 / Dining</p>
+        <p class="text-white font-serif text-2xl font-light mb-3">Dining Room</p>
+        <span class="btn-gold text-xs py-2.5 px-5">Shop Now</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+     NEW ARRIVALS
+════════════════════════════════════ -->
+<section id="new-arrivals" class="py-24 md:py-32 bg-stone-100">
+  <div class="px-6 md:px-14 lg:px-20 max-w-screen-2xl mx-auto">
+
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
+      <div class="reveal">
+        <p class="label-xs text-gold-400 mb-3">Just Arrived</p>
+        <h2 class="display-lg text-stone-950">New Arrivals</h2>
+      </div>
+      <div class="flex gap-2 reveal reveal-delay-2" role="group" aria-label="Filter products">
+        <button class="label-xs px-5 py-2.5 bg-stone-950 text-white cursor-pointer transition-colors duration-200">All</button>
+        <button class="label-xs px-5 py-2.5 border border-stone-300 text-stone-600 hover:bg-stone-200 cursor-pointer transition-colors duration-200">Seating</button>
+        <button class="label-xs px-5 py-2.5 border border-stone-300 text-stone-600 hover:bg-stone-200 cursor-pointer transition-colors duration-200">Tables</button>
+        <button class="label-xs px-5 py-2.5 border border-stone-300 text-stone-600 hover:bg-stone-200 cursor-pointer transition-colors duration-200">Storage</button>
+      </div>
+    </div>
+
+    <!-- Product grid -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+
+      <!-- Product 1 -->
+      <article class="group cursor-pointer reveal" tabindex="0">
+        <div class="overflow-hidden bg-white mb-4 relative" style="aspect-ratio:3/4;">
+          <img src="https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&q=80&auto=format&fit=crop"
+               alt="Austen Walnut Lounge Chair"
+               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+               loading="lazy" />
+          <button aria-label="Add Austen Chair to wishlist" class="absolute top-3 right-3 w-8 h-8 bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer hover:bg-white">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#1C1917" stroke-width="1.5" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <div class="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-stone-950">
+            <button class="w-full label-xs text-white py-2 cursor-pointer hover:text-gold-300 transition-colors duration-150">Add to Cart</button>
+          </div>
+        </div>
+        <p class="label-xs text-stone-500 mb-1">Seating</p>
+        <h3 class="font-serif text-stone-950 text-lg font-light mb-1" style="font-family:'Cormorant',serif;">Austen Walnut Chair</h3>
+        <div class="flex items-center justify-between">
+          <p class="text-stone-950 text-sm font-medium" style="font-family:'Montserrat',sans-serif;">₦485,000</p>
+          <div class="flex gap-1" aria-label="4.8 out of 5 stars">
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 2 -->
+      <article class="group cursor-pointer reveal reveal-delay-1" tabindex="0">
+        <div class="overflow-hidden bg-white mb-4 relative" style="aspect-ratio:3/4;">
+          <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80&auto=format&fit=crop"
+               alt="Florence Linen Sofa in cream"
+               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+               loading="lazy" />
+          <span class="absolute top-3 left-3 label-xs bg-stone-950 text-white px-3 py-1">New</span>
+          <button aria-label="Add Florence Sofa to wishlist" class="absolute top-3 right-3 w-8 h-8 bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer hover:bg-white">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#1C1917" stroke-width="1.5" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <div class="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-stone-950">
+            <button class="w-full label-xs text-white py-2 cursor-pointer hover:text-gold-300 transition-colors duration-150">Add to Cart</button>
+          </div>
+        </div>
+        <p class="label-xs text-stone-500 mb-1">Seating</p>
+        <h3 class="font-serif text-stone-950 text-lg font-light mb-1" style="font-family:'Cormorant',serif;">Florence Linen Sofa</h3>
+        <div class="flex items-center justify-between">
+          <p class="text-stone-950 text-sm font-medium" style="font-family:'Montserrat',sans-serif;">₦1,240,000</p>
+          <div class="flex gap-1" aria-label="4.9 out of 5 stars">
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 3 -->
+      <article class="group cursor-pointer reveal reveal-delay-2" tabindex="0">
+        <div class="overflow-hidden bg-white mb-4 relative" style="aspect-ratio:3/4;">
+          <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=600&q=80&auto=format&fit=crop"
+               alt="Verona Marble Dining Table"
+               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+               loading="lazy" />
+          <button aria-label="Add Verona Table to wishlist" class="absolute top-3 right-3 w-8 h-8 bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer hover:bg-white">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#1C1917" stroke-width="1.5" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <div class="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-stone-950">
+            <button class="w-full label-xs text-white py-2 cursor-pointer hover:text-gold-300 transition-colors duration-150">Add to Cart</button>
+          </div>
+        </div>
+        <p class="label-xs text-stone-500 mb-1">Tables</p>
+        <h3 class="font-serif text-stone-950 text-lg font-light mb-1" style="font-family:'Cormorant',serif;">Verona Marble Dining</h3>
+        <div class="flex items-center justify-between">
+          <p class="text-stone-950 text-sm font-medium" style="font-family:'Montserrat',sans-serif;">₦2,100,000</p>
+          <div class="flex gap-1" aria-label="4.7 out of 5 stars">
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#E7E5E4" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 4 -->
+      <article class="group cursor-pointer reveal reveal-delay-3" tabindex="0">
+        <div class="overflow-hidden bg-white mb-4 relative" style="aspect-ratio:3/4;">
+          <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80&auto=format&fit=crop"
+               alt="Osaka Solid Oak Sideboard"
+               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+               loading="lazy" />
+          <span class="absolute top-3 left-3 label-xs bg-gold-400 text-white px-3 py-1">Bestseller</span>
+          <button aria-label="Add Osaka Sideboard to wishlist" class="absolute top-3 right-3 w-8 h-8 bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer hover:bg-white">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#1C1917" stroke-width="1.5" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <div class="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-stone-950">
+            <button class="w-full label-xs text-white py-2 cursor-pointer hover:text-gold-300 transition-colors duration-150">Add to Cart</button>
+          </div>
+        </div>
+        <p class="label-xs text-stone-500 mb-1">Storage</p>
+        <h3 class="font-serif text-stone-950 text-lg font-light mb-1" style="font-family:'Cormorant',serif;">Osaka Oak Sideboard</h3>
+        <div class="flex items-center justify-between">
+          <p class="text-stone-950 text-sm font-medium" style="font-family:'Montserrat',sans-serif;">₦760,000</p>
+          <div class="flex gap-1" aria-label="5 out of 5 stars">
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+     FEATURED PIECE (EDITORIAL)
+════════════════════════════════════ -->
+<section class="bg-stone-900 overflow-hidden">
+  <div class="max-w-screen-2xl mx-auto grid md:grid-cols-2">
+
+    <!-- Image -->
+    <div class="overflow-hidden" style="aspect-ratio:1/1; min-height:420px;">
+      <img src="https://images.unsplash.com/photo-1540574163026-643ea20ade25?w=1200&q=80&auto=format&fit=crop"
+           alt="The Meridian Sectional — a sculptural statement piece in mocha boucle"
+           class="w-full h-full object-cover hover:scale-105 transition-transform duration-1000"
+           loading="lazy" />
+    </div>
+
+    <!-- Copy -->
+    <div class="flex flex-col justify-center px-10 md:px-16 lg:px-20 py-20">
+      <p class="label-xs text-gold-400 mb-5">Featured Piece</p>
+      <h2 class="display-lg text-stone-50 mb-6" style="font-style:italic;">The Meridian<br/>Sectional</h2>
+      <p class="text-stone-300 leading-relaxed mb-4" style="font-size:0.95rem; font-family:'Montserrat',sans-serif; font-weight:300; max-width:400px;">
+        Sculptural depth meets sumptuous comfort. Hand-tufted boucle over a solid beech frame with brushed brass feet — a centrepiece that commands any room.
+      </p>
+      <ul class="mb-10 space-y-2">
+        <li class="flex items-center gap-3 text-stone-400" style="font-family:'Montserrat',sans-serif; font-size:0.78rem;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#CA8A04" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          Solid beech frame · Fully handmade
+        </li>
+        <li class="flex items-center gap-3 text-stone-400" style="font-family:'Montserrat',sans-serif; font-size:0.78rem;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#CA8A04" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          Available in 8 bespoke fabrics
+        </li>
+        <li class="flex items-center gap-3 text-stone-400" style="font-family:'Montserrat',sans-serif; font-size:0.78rem;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#CA8A04" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          12–16 week production lead time
+        </li>
+      </ul>
+      <div class="flex flex-wrap items-center gap-5">
+        <a href="#" class="btn-gold">
+          Shop The Meridian
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <p class="text-stone-50 font-medium" style="font-family:'Cormorant',serif; font-size:1.4rem; letter-spacing:0.02em;">₦3,850,000</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+     CRAFTSMANSHIP
+════════════════════════════════════ -->
+<section id="craftsmanship" class="py-24 md:py-36 px-6 md:px-14 lg:px-20 max-w-screen-2xl mx-auto">
+  <div class="grid md:grid-cols-2 gap-14 md:gap-20 items-center">
+
+    <!-- Images mosaic -->
+    <div class="grid grid-cols-2 gap-3 reveal">
+      <div class="col-span-2 overflow-hidden" style="aspect-ratio:16/9;">
+        <img src="https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=900&q=80&auto=format&fit=crop"
+             alt="Craftsman hand-finishing a wooden furniture piece in the workshop"
+             class="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+             loading="lazy" />
+      </div>
+      <div class="overflow-hidden" style="aspect-ratio:4/5;">
+        <img src="https://images.unsplash.com/photo-1565374392748-bf7ed58dfb6b?w=600&q=80&auto=format&fit=crop"
+             alt="Detail of wood joinery in a furniture workshop"
+             class="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+             loading="lazy" />
+      </div>
+      <div class="overflow-hidden" style="aspect-ratio:4/5;">
+        <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=600&q=80&auto=format&fit=crop"
+             alt="Close up of premium linen fabric texture"
+             class="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+             loading="lazy" />
+      </div>
+    </div>
+
+    <!-- Copy -->
+    <div class="reveal reveal-delay-2">
+      <p class="label-xs text-gold-400 mb-5">Our Promise</p>
+      <h2 class="display-lg text-stone-950 mb-8">The Art of<br/><em style="font-style:italic;">Deliberate</em><br/>Making</h2>
+      <p class="text-stone-600 leading-relaxed mb-6" style="font-size:0.95rem; font-family:'Montserrat',sans-serif; font-weight:300;">
+        Every Alabis piece begins as a conversation between master craftsman and raw material. Our Lagos atelier works exclusively with sustainably-harvested hardwoods, hand-selected stone, and textiles that earn their place through texture rather than trend.
+      </p>
+      <p class="text-stone-600 leading-relaxed mb-10" style="font-size:0.95rem; font-family:'Montserrat',sans-serif; font-weight:300;">
+        We do not rush. A single dining table may take twelve weeks from first sketch to final finish — and that time is precisely what you are investing in.
+      </p>
+
+      <!-- Pillars -->
+      <div class="grid grid-cols-3 gap-6 mb-10">
+        <div>
+          <div class="w-8 h-8 flex items-center justify-center mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#CA8A04" stroke-width="1.5" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>
+          </div>
+          <p class="label-xs text-stone-950 mb-1">Materials</p>
+          <p class="text-stone-500" style="font-size:0.75rem; font-family:'Montserrat',sans-serif; font-weight:300; line-height:1.5;">Sustainably sourced hardwoods &amp; natural stone</p>
+        </div>
+        <div>
+          <div class="w-8 h-8 flex items-center justify-center mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#CA8A04" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <p class="label-xs text-stone-950 mb-1">Time</p>
+          <p class="text-stone-500" style="font-size:0.75rem; font-family:'Montserrat',sans-serif; font-weight:300; line-height:1.5;">8–16 weeks per piece, never rushed</p>
+        </div>
+        <div>
+          <div class="w-8 h-8 flex items-center justify-center mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#CA8A04" stroke-width="1.5" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <p class="label-xs text-stone-950 mb-1">Warranty</p>
+          <p class="text-stone-500" style="font-size:0.75rem; font-family:'Montserrat',sans-serif; font-weight:300; line-height:1.5;">10-year structural guarantee, always</p>
+        </div>
+      </div>
+
+      <a href="#" class="btn-outline">Discover Our Process</a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+     TESTIMONIALS
+════════════════════════════════════ -->
+<section class="py-24 bg-stone-950 px-6 md:px-14 lg:px-20">
+  <div class="max-w-screen-2xl mx-auto">
+
+    <div class="text-center mb-16 reveal">
+      <p class="label-xs text-gold-400 mb-4">Client Stories</p>
+      <h2 class="display-lg text-stone-50">Voices of<br/><em style="font-style:italic;">our Patrons</em></h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+
+      <blockquote class="bg-stone-800 p-8 reveal" tabindex="0">
+        <div class="flex gap-1 mb-5" aria-label="5 stars">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <p class="text-stone-300 leading-relaxed mb-6" style="font-family:'Cormorant',serif; font-size:1.1rem; font-style:italic;">
+          "The Meridian Sectional has transformed our living room into something from an architectural magazine. The quality is beyond anything I expected — this will outlast our house."
+        </p>
+        <footer class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-full bg-stone-700 flex items-center justify-center">
+            <span style="font-family:'Cormorant',serif; font-size:1rem; color:#CA8A04; font-weight:500;">A</span>
+          </div>
+          <div>
+            <p class="label-xs text-stone-50">Adaeze Okonkwo</p>
+            <p class="text-stone-500" style="font-size:0.65rem; font-family:'Montserrat',sans-serif;">Lagos, Nigeria</p>
+          </div>
+        </footer>
+      </blockquote>
+
+      <blockquote class="bg-stone-800 p-8 reveal reveal-delay-1" tabindex="0">
+        <div class="flex gap-1 mb-5" aria-label="5 stars">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <p class="text-stone-300 leading-relaxed mb-6" style="font-family:'Cormorant',serif; font-size:1.1rem; font-style:italic;">
+          "White-glove delivery, impeccable packaging, and a piece that looks even better in person than in the photographs. Alabis is in a league entirely its own."
+        </p>
+        <footer class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-full bg-stone-700 flex items-center justify-center">
+            <span style="font-family:'Cormorant',serif; font-size:1rem; color:#CA8A04; font-weight:500;">K</span>
+          </div>
+          <div>
+            <p class="label-xs text-stone-50">Kolade Fashola</p>
+            <p class="text-stone-500" style="font-size:0.65rem; font-family:'Montserrat',sans-serif;">Abuja, Nigeria</p>
+          </div>
+        </footer>
+      </blockquote>
+
+      <blockquote class="bg-stone-800 p-8 reveal reveal-delay-2" tabindex="0">
+        <div class="flex gap-1 mb-5" aria-label="5 stars">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <p class="text-stone-300 leading-relaxed mb-6" style="font-family:'Cormorant',serif; font-size:1.1rem; font-style:italic;">
+          "We furnished our entire executive suite through Alabis. Three years later, not a scratch, not a creak. The bespoke service was genuinely exceptional."
+        </p>
+        <footer class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-full bg-stone-700 flex items-center justify-center">
+            <span style="font-family:'Cormorant',serif; font-size:1rem; color:#CA8A04; font-weight:500;">T</span>
+          </div>
+          <div>
+            <p class="label-xs text-stone-50">Titilayo Bankole</p>
+            <p class="text-stone-500" style="font-size:0.65rem; font-family:'Montserrat',sans-serif;">Port Harcourt, Nigeria</p>
+          </div>
+        </footer>
+      </blockquote>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+     SERVICES STRIP
+════════════════════════════════════ -->
+<section class="py-16 border-y border-stone-200 px-6 md:px-14 lg:px-20" aria-label="Our services">
+  <div class="max-w-screen-2xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+    <div class="reveal">
+      <div class="flex justify-center mb-3">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#CA8A04" stroke-width="1.2" aria-hidden="true"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      </div>
+      <p class="label-xs text-stone-950 mb-1">White-Glove Delivery</p>
+      <p class="text-stone-500" style="font-size:0.72rem; font-family:'Montserrat',sans-serif; font-weight:300; line-height:1.6;">Installation included across Nigeria</p>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <div class="flex justify-center mb-3">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#CA8A04" stroke-width="1.2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <p class="label-xs text-stone-950 mb-1">10-Year Warranty</p>
+      <p class="text-stone-500" style="font-size:0.72rem; font-family:'Montserrat',sans-serif; font-weight:300; line-height:1.6;">Full structural guarantee on all pieces</p>
+    </div>
+    <div class="reveal reveal-delay-2">
+      <div class="flex justify-center mb-3">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#CA8A04" stroke-width="1.2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+      </div>
+      <p class="label-xs text-stone-950 mb-1">Bespoke Orders</p>
+      <p class="text-stone-500" style="font-size:0.72rem; font-family:'Montserrat',sans-serif; font-weight:300; line-height:1.6;">Custom sizing, materials &amp; finishes</p>
+    </div>
+    <div class="reveal reveal-delay-3">
+      <div class="flex justify-center mb-3">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#CA8A04" stroke-width="1.2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </div>
+      <p class="label-xs text-stone-950 mb-1">Showroom Visit</p>
+      <p class="text-stone-500" style="font-size:0.72rem; font-family:'Montserrat',sans-serif; font-weight:300; line-height:1.6;">By appointment · Lagos Island</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+     NEWSLETTER
+════════════════════════════════════ -->
+<section class="py-24 md:py-32 px-6 md:px-14 lg:px-20" aria-labelledby="newsletter-heading">
+  <div class="max-w-2xl mx-auto text-center reveal">
+    <p class="label-xs text-gold-400 mb-4">Stay Informed</p>
+    <h2 class="display-md text-stone-950 mb-4" id="newsletter-heading">The Art of Living Well</h2>
+    <p class="text-stone-500 mb-10 leading-relaxed" style="font-size:0.9rem; font-family:'Montserrat',sans-serif; font-weight:300;">
+      New collections, design insights, and exclusive access to bespoke commissions — delivered once a month, never more.
+    </p>
+    <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" aria-label="Newsletter signup">
+      <label for="email-input" class="sr-only">Your email address</label>
+      <input id="email-input" type="email" required placeholder="Your email address"
+             class="flex-1 bg-transparent border border-stone-300 px-5 py-3.5 text-stone-950 placeholder-stone-400 focus:outline-none focus:border-stone-950 transition-colors duration-200"
+             style="font-family:'Montserrat',sans-serif; font-size:0.78rem; font-weight:300;" />
+      <button type="submit" class="btn-gold whitespace-nowrap">Subscribe</button>
+    </form>
+    <p class="text-stone-400 mt-4" style="font-size:0.65rem; font-family:'Montserrat',sans-serif; letter-spacing:0.05em;">No spam. Unsubscribe at any time.</p>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+     FOOTER
+════════════════════════════════════ -->
+<footer class="bg-stone-900 text-stone-400 px-6 md:px-14 lg:px-20 pt-20 pb-10" role="contentinfo">
+  <div class="max-w-screen-2xl mx-auto">
+
+    <!-- Top row -->
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-10 pb-14 border-b border-stone-800">
+
+      <!-- Brand -->
+      <div class="col-span-2 md:col-span-2">
+        <div class="mb-5">
+          <p style="font-family:'Cormorant',serif; font-size:1.8rem; font-weight:400; color:#FAFAF9; letter-spacing:0.15em;">ALABIS</p>
+          <p class="label-xs text-stone-500" style="letter-spacing:0.3em; font-size:0.55rem;">FURNITURE</p>
+        </div>
+        <p class="text-stone-400 leading-relaxed mb-6" style="font-size:0.8rem; font-weight:300; max-width:300px; line-height:1.8;">
+          Heirloom furniture crafted in Lagos. Where master artisans and rare materials meet deliberate restraint.
+        </p>
+        <div class="flex gap-4">
+          <a href="#" aria-label="Alabis on Instagram" class="text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" aria-label="Alabis on Pinterest" class="text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.98.03-2.83.19-.77 1.26-5.33 1.26-5.33s-.32-.64-.32-1.59c0-1.49.86-2.6 1.93-2.6.91 0 1.35.68 1.35 1.5 0 .91-.58 2.28-.88 3.55-.25 1.06.53 1.92 1.57 1.92 1.88 0 3.14-2.43 3.14-5.32 0-2.19-1.48-3.73-3.6-3.73-2.45 0-3.89 1.84-3.89 3.74 0 .74.28 1.53.64 1.96a.26.26 0 0 1 .06.25l-.24.97c-.04.15-.13.18-.3.11-1.12-.52-1.82-2.16-1.82-3.48 0-2.83 2.06-5.43 5.93-5.43 3.11 0 5.53 2.22 5.53 5.19 0 3.1-1.95 5.59-4.66 5.59-.91 0-1.76-.47-2.05-1.03l-.56 2.08c-.2.78-.75 1.76-1.12 2.36.85.26 1.75.4 2.68.4 5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
+          </a>
+          <a href="#" aria-label="Alabis on Twitter / X" class="text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.742l7.725-8.836L2.126 2.25H8.05l4.261 5.636L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Nav columns -->
+      <div>
+        <p class="label-xs text-stone-50 mb-5">Shop</p>
+        <ul class="space-y-3" role="list">
+          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Living Room</a></li>
+          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Bedroom</a></li>
+          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Dining Room</a></li>
+          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Office</a></li>
+          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Outdoor</a></li>
+          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">New Arrivals</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="label-xs text-stone-50 mb-5">Services</p>
+        <ul class="space-y-3" role="list">
+          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Bespoke Orders</a></li>
+          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Interior Consultation</a></li>
+          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Showroom Visit</a></li>
+          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Trade Programme</a></li>
+          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Gift Cards</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="label-xs text-stone-50 mb-5">Company</p>
+        <ul class="space-y-3" role="list">
+          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Our Story</a></li>
+          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Craftsmanship</a></li>
+          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Sustainability</a></li>
+          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Press</a></li>
+          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Contact</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+      <p style="font-size:0.68rem; font-family:'Montserrat',sans-serif; font-weight:300; color:#57534E;">
+        &copy; 2025 Alabis Furniture. All rights reserved. Lagos, Nigeria.
+      </p>
+      <div class="flex gap-5">
+        <a href="#" class="text-stone-500 hover:text-stone-300 transition-colors duration-200 cursor-pointer" style="font-size:0.68rem; font-family:'Montserrat',sans-serif; font-weight:300;">Privacy Policy</a>
+        <a href="#" class="text-stone-500 hover:text-stone-300 transition-colors duration-200 cursor-pointer" style="font-size:0.68rem; font-family:'Montserrat',sans-serif; font-weight:300;">Terms of Service</a>
+        <a href="#" class="text-stone-500 hover:text-stone-300 transition-colors duration-200 cursor-pointer" style="font-size:0.68rem; font-family:'Montserrat',sans-serif; font-weight:300;">Cookie Policy</a>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+
+<!-- ════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════ -->
+<script>
+  // Navbar scroll behavior
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  // Hero image parallax + reveal
+  const heroBg = document.getElementById('heroBg');
+  window.addEventListener('load', () => heroBg.classList.add('loaded'));
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(el => observer.observe(el));
+
+  // Product filter (UI only)
+  const filterBtns = document.querySelectorAll('[role="group"] button');
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => {
+        b.classList.remove('bg-stone-950', 'text-white');
+        b.classList.add('border', 'border-stone-300', 'text-stone-600');
+      });
+      btn.classList.add('bg-stone-950', 'text-white');
+      btn.classList.remove('border', 'border-stone-300', 'text-stone-600');
+    });
+  });
+
+  // Newsletter form
+  const form = document.querySelector('form[aria-label="Newsletter signup"]');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const btn = form.querySelector('button[type="submit"]');
+    const originalText = btn.textContent;
+    btn.textContent = 'Subscribed';
+    btn.disabled = true;
+    btn.style.background = '#44403C';
+    setTimeout(() => {
+      btn.textContent = originalText;
+      btn.disabled = false;
+      btn.style.background = '';
+      form.reset();
+    }, 3000);
+  });
+</script>
+
+</body>
+</html>
