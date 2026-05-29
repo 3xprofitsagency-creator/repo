@@ -3,995 +3,2055 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ALABIS — Luxury Furniture</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Alabis — Furniture for the Considered Home</title>
+
+  <!-- Fonts: Playfair Display (editorial serif) + DM Sans (clean geometric) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            serif: ['Cormorant', 'Georgia', 'serif'],
-            sans: ['Montserrat', 'sans-serif'],
-          },
-          colors: {
-            stone: {
-              950: '#0C0A09',
-              900: '#1C1917',
-              800: '#292524',
-              700: '#44403C',
-              600: '#57534E',
-              400: '#A8A29E',
-              200: '#E7E5E4',
-              100: '#F5F5F4',
-              50:  '#FAFAF9',
-            },
-            gold: {
-              600: '#92400E',
-              500: '#B45309',
-              400: '#CA8A04',
-              300: '#D97706',
-              200: '#FDE68A',
-              100: '#FEF3C7',
-            }
-          },
-          letterSpacing: {
-            widest: '0.3em',
-          }
-        }
-      }
-    }
-  </script>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; }
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
 
-    html { scroll-behavior: smooth; }
+  <style>
+    /* ═══════════════════════════════════
+       DESIGN TOKENS — Aesop warmth palette
+    ═══════════════════════════════════ */
+    :root {
+      --bg:           #F5F0E8;
+      --bg-warm:      #EDE7DA;
+      --bg-dark:      #1E1914;
+      --bg-mid:       #2D2720;
+      --text:         #1E1914;
+      --text-mid:     #6B6258;
+      --text-light:   #9A9088;
+      --border:       #D4CABD;
+      --border-dark:  #3A3028;
+      --accent:       #A0855C;
+      --accent-light: #C5A880;
+      --white:        #FDFAF5;
+
+      --font-serif: 'Playfair Display', Georgia, serif;
+      --font-sans:  'DM Sans', system-ui, sans-serif;
+
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* ═══════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
 
     body {
-      background-color: #FAFAF9;
-      color: #0C0A09;
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 300;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-weight: 400;
+      line-height: 1.6;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ---- Navbar ---- */
-    #navbar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 50;
-      transition: background 0.4s ease, box-shadow 0.4s ease;
-    }
-    #navbar.scrolled {
-      background: rgba(250,250,249,0.92);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      box-shadow: 0 1px 0 rgba(0,0,0,0.06);
-    }
+    img { display: block; max-width: 100%; }
+    a   { text-decoration: none; color: inherit; }
+    ::selection { background: var(--accent); color: var(--white); }
+    :focus-visible { outline: 1.5px solid var(--accent); outline-offset: 3px; }
 
-    /* ---- Hero ---- */
-    .hero-section {
-      height: 100svh;
-      min-height: 680px;
-      position: relative;
-      overflow: hidden;
-      background: #1C1917;
+    /* ═══════════════════════════════════
+       TYPOGRAPHY UTILITIES
+    ═══════════════════════════════════ */
+    .label {
+      font-family: var(--font-sans);
+      font-size: 0.625rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-mid);
     }
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      background: url('https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=2400&q=85&auto=format&fit=crop') center/cover no-repeat;
-      opacity: 0.55;
-      transform: scale(1.04);
-      transition: transform 8s ease-out;
-    }
-    .hero-bg.loaded { transform: scale(1); }
+    .label--light  { color: rgba(253,250,245,0.55); }
+    .label--accent { color: var(--accent); }
 
-    .hero-grain {
-      position: absolute;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-    }
+    .serif { font-family: var(--font-serif); }
 
-    /* Cormorant heading sizes */
-    .display-xl {
-      font-family: 'Cormorant', Georgia, serif;
-      font-size: clamp(3.5rem, 8vw, 9rem);
-      font-weight: 300;
-      line-height: 0.92;
-      letter-spacing: -0.01em;
-    }
-    .display-lg {
-      font-family: 'Cormorant', Georgia, serif;
-      font-size: clamp(2.5rem, 5vw, 6rem);
-      font-weight: 300;
-      line-height: 0.95;
-    }
-    .display-md {
-      font-family: 'Cormorant', Georgia, serif;
-      font-size: clamp(1.8rem, 3vw, 3.5rem);
+    h1, h2, h3, .h1, .h2, .h3 {
+      font-family: var(--font-serif);
       font-weight: 400;
-      line-height: 1.1;
+      line-height: 1.05;
     }
 
-    .label-xs {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
+    /* ═══════════════════════════════════
+       LAYOUT
+    ═══════════════════════════════════ */
+    .container {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 40px;
     }
+    @media (max-width: 768px) { .container { padding: 0 20px; } }
 
-    /* ---- Product cards ---- */
-    .product-card { position: relative; overflow: hidden; cursor: pointer; }
-    .product-card img { transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-    .product-card:hover img { transform: scale(1.06); }
-    .product-card .card-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(12,10,9,0.7) 0%, transparent 55%);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-    .product-card:hover .card-overlay { opacity: 1; }
-    .product-card .card-cta {
-      position: absolute; bottom: 1.5rem; left: 1.5rem; right: 1.5rem;
-      transform: translateY(8px);
-      opacity: 0;
-      transition: all 0.35s ease;
-    }
-    .product-card:hover .card-cta { transform: translateY(0); opacity: 1; }
+    .divider { height: 1px; background: var(--border); }
 
-    /* ---- Gold button ---- */
-    .btn-gold {
+    /* ═══════════════════════════════════
+       BUTTONS
+    ═══════════════════════════════════ */
+    .btn {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      background: #CA8A04;
-      color: #fff;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.65rem;
+      gap: 10px;
+      font-family: var(--font-sans);
+      font-size: 0.625rem;
       font-weight: 500;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      padding: 0.875rem 2rem;
-      transition: background 0.25s ease, transform 0.2s ease;
       cursor: pointer;
+      transition: all 0.22s ease;
       border: none;
-      text-decoration: none;
+      background: none;
     }
-    .btn-gold:hover { background: #B45309; transform: translateY(-1px); }
 
-    .btn-outline {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: transparent;
-      color: #0C0A09;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      padding: 0.875rem 2rem;
-      border: 1px solid #0C0A09;
-      transition: background 0.25s ease, color 0.25s ease;
-      cursor: pointer;
-      text-decoration: none;
+    .btn--dark {
+      background: var(--bg-dark);
+      color: var(--white);
+      padding: 14px 28px;
     }
-    .btn-outline:hover { background: #0C0A09; color: #FAFAF9; }
+    .btn--dark:hover { background: var(--bg-mid); }
 
-    .btn-outline-light {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: transparent;
-      color: #FAFAF9;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      padding: 0.875rem 2rem;
-      border: 1px solid rgba(250,250,249,0.5);
-      transition: background 0.25s ease, border-color 0.25s ease;
-      cursor: pointer;
-      text-decoration: none;
+    .btn--outline {
+      border: 1px solid var(--text);
+      color: var(--text);
+      padding: 13px 28px;
     }
-    .btn-outline-light:hover { background: rgba(250,250,249,0.1); border-color: #FAFAF9; }
+    .btn--outline:hover { background: var(--text); color: var(--white); }
 
-    /* ---- Horizontal scroll strip ---- */
-    .scroll-strip {
-      display: flex;
-      gap: 1.5rem;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
+    .btn--outline-light {
+      border: 1px solid rgba(253,250,245,0.4);
+      color: var(--white);
+      padding: 13px 28px;
     }
-    .scroll-strip::-webkit-scrollbar { display: none; }
-    .scroll-strip > * { scroll-snap-align: start; flex-shrink: 0; }
+    .btn--outline-light:hover { border-color: var(--white); background: rgba(253,250,245,0.08); }
 
-    /* ---- Divider ---- */
-    .divider { height: 1px; background: #E7E5E4; }
-
-    /* ---- Marquee ---- */
-    @keyframes marquee {
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
+    .btn--ghost {
+      color: var(--text);
+      padding: 0;
+      gap: 8px;
     }
-    .marquee-track { display: flex; width: max-content; animation: marquee 28s linear infinite; }
-    .marquee-track:hover { animation-play-state: paused; }
+    .btn--ghost:hover { color: var(--accent); }
+    .btn--ghost .arrow {
+      width: 28px;
+      height: 1px;
+      background: currentColor;
+      position: relative;
+      transition: width 0.25s ease;
+    }
+    .btn--ghost:hover .arrow { width: 38px; }
+    .btn--ghost .arrow::after {
+      content: '';
+      position: absolute;
+      right: 0; top: -3px;
+      width: 7px; height: 7px;
+      border-right: 1px solid currentColor;
+      border-top: 1px solid currentColor;
+      transform: rotate(45deg);
+    }
 
-    /* ---- Fade in on scroll ---- */
-    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-    .reveal-delay-1 { transition-delay: 0.1s; }
-    .reveal-delay-2 { transition-delay: 0.2s; }
-    .reveal-delay-3 { transition-delay: 0.3s; }
-    .reveal-delay-4 { transition-delay: 0.4s; }
-
-    /* ---- Selection ---- */
-    ::selection { background: #CA8A04; color: #fff; }
-
-    /* ---- Focus ---- */
-    :focus-visible { outline: 2px solid #CA8A04; outline-offset: 3px; }
+    /* ═══════════════════════════════════
+       REVEAL ANIMATIONS
+    ═══════════════════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+    }
+    .reveal.in { opacity: 1; transform: none; }
+    .reveal-d1 { transition-delay: 0.1s; }
+    .reveal-d2 { transition-delay: 0.2s; }
+    .reveal-d3 { transition-delay: 0.3s; }
+    .reveal-d4 { transition-delay: 0.4s; }
 
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+      .reveal { opacity: 1; transform: none; transition: none; }
     }
+
+    /* ══════════════════════════════════════════════════════════
+       1. NAVIGATION
+    ══════════════════════════════════════════════════════════ */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--bg);
+      transition: border-color 0.3s ease;
+      border-bottom: 1px solid transparent;
+    }
+    #nav.scrolled { border-bottom-color: var(--border); }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.625rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-logo {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      cursor: pointer;
+    }
+    .nav-logo-name {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      color: var(--text);
+      line-height: 1;
+      display: block;
+    }
+    .nav-logo-sub {
+      font-size: 0.5rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      display: block;
+      margin-top: 2px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .nav-icon {
+      cursor: pointer;
+      color: var(--text-mid);
+      transition: color 0.2s;
+      background: none;
+      border: none;
+      padding: 0;
+      display: flex;
+    }
+    .nav-icon:hover { color: var(--text); }
+
+    .nav-hamburger { display: none; }
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       2. HERO — editorial split
+    ══════════════════════════════════════════════════════════ */
+    .hero {
+      display: grid;
+      grid-template-columns: 58% 42%;
+      min-height: 100svh;
+      padding-top: 64px;
+    }
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+    }
+
+    .hero-image {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.04);
+      transition: transform 1.4s var(--ease-out);
+    }
+    .hero-image img.loaded { transform: scale(1); }
+
+    @media (max-width: 900px) {
+      .hero-image { aspect-ratio: 4/3; }
+    }
+
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 60px 80px 64px;
+      background: var(--bg);
+    }
+    @media (max-width: 1100px) { .hero-content { padding: 60px 40px; } }
+    @media (max-width: 900px)  { .hero-content { padding: 48px 20px; } }
+
+    .hero-tag {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .hero-tag-line {
+      width: 36px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .hero-headline {
+      font-size: clamp(2.8rem, 4.5vw, 5rem);
+      font-weight: 400;
+      line-height: 1.02;
+      letter-spacing: -0.01em;
+      margin-bottom: 28px;
+      color: var(--text);
+    }
+    .hero-headline em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-body {
+      font-size: 0.9rem;
+      color: var(--text-mid);
+      line-height: 1.75;
+      max-width: 360px;
+      margin-bottom: 48px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 32px;
+      left: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-scroll-line {
+      width: 1px;
+      height: 48px;
+      background: rgba(30,25,20,0.25);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       3. COLLECTIONS
+    ══════════════════════════════════════════════════════════ */
+    .collections-section {
+      padding: 96px 0 80px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 48px;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 3vw, 3rem);
+    }
+
+    .collections-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+    }
+    @media (max-width: 900px) {
+      .collections-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 540px) {
+      .collections-grid { grid-template-columns: 1fr; }
+    }
+
+    .col-card {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      aspect-ratio: 3/4;
+    }
+    .col-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.9s var(--ease-out);
+    }
+    .col-card:hover img { transform: scale(1.06); }
+
+    .col-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(20,16,12,0.75) 0%, rgba(20,16,12,0.1) 50%, transparent 100%);
+      transition: opacity 0.4s ease;
+    }
+
+    .col-card-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 28px 24px;
+    }
+    .col-card-num {
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(253,250,245,0.5);
+      margin-bottom: 6px;
+    }
+    .col-card-name {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--white);
+      display: block;
+      margin-bottom: 12px;
+      line-height: 1.1;
+    }
+    .col-card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(253,250,245,0.65);
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.3s ease, transform 0.3s ease, color 0.2s;
+    }
+    .col-card:hover .col-card-link {
+      opacity: 1;
+      transform: none;
+    }
+    .col-card-link:hover { color: var(--white); }
+
+    /* ══════════════════════════════════════════════════════════
+       4. BRAND STATEMENT — dark editorial
+    ══════════════════════════════════════════════════════════ */
+    .brand-statement {
+      background: var(--bg-dark);
+      padding: 120px 0;
+    }
+
+    .statement-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    @media (max-width: 900px) {
+      .statement-inner { grid-template-columns: 1fr; gap: 48px; }
+    }
+
+    .statement-quote {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: clamp(1.8rem, 3vw, 3rem);
+      color: var(--white);
+      line-height: 1.2;
+      font-weight: 400;
+    }
+
+    .statement-quote em {
+      color: var(--accent-light);
+      font-style: italic;
+    }
+
+    .statement-copy {
+      color: rgba(253,250,245,0.6);
+      font-size: 0.875rem;
+      line-height: 1.85;
+      margin-top: 32px;
+      max-width: 400px;
+    }
+
+    .statement-copy-block {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .statement-image {
+      aspect-ratio: 4/5;
+      overflow: hidden;
+    }
+    .statement-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.88) saturate(0.85);
+      transition: transform 0.9s var(--ease-out);
+    }
+    .statement-image:hover img { transform: scale(1.04); }
+
+    .statement-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--border-dark);
+    }
+
+    .statement-stat-row {
+      display: flex;
+      gap: 40px;
+      margin-top: 40px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border-dark);
+    }
+    .statement-stat-num {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      color: var(--white);
+      display: block;
+      line-height: 1;
+    }
+    .statement-stat-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(253,250,245,0.4);
+      display: block;
+      margin-top: 6px;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       5. FEATURED PRODUCT
+    ══════════════════════════════════════════════════════════ */
+    .featured-section {
+      padding: 96px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .featured-inner {
+      display: grid;
+      grid-template-columns: 55% 45%;
+      gap: 0;
+      align-items: stretch;
+    }
+    @media (max-width: 900px) {
+      .featured-inner { grid-template-columns: 1fr; }
+    }
+
+    .featured-image {
+      position: relative;
+      overflow: hidden;
+      background: var(--bg-warm);
+    }
+    .featured-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      min-height: 560px;
+      transition: transform 0.9s var(--ease-out);
+    }
+    .featured-image:hover img { transform: scale(1.04); }
+
+    .featured-tag-abs {
+      position: absolute;
+      top: 28px;
+      left: 28px;
+    }
+
+    .featured-content {
+      padding: 64px 56px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: var(--white);
+    }
+    @media (max-width: 1100px) { .featured-content { padding: 48px 36px; } }
+    @media (max-width: 900px)  { .featured-content { padding: 40px 20px; } }
+
+    .featured-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .featured-name {
+      font-size: clamp(1.8rem, 2.8vw, 3.2rem);
+      margin-bottom: 20px;
+    }
+
+    .featured-body {
+      font-size: 0.875rem;
+      color: var(--text-mid);
+      line-height: 1.8;
+      margin-bottom: 32px;
+      max-width: 380px;
+    }
+
+    .featured-specs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-top: 1px solid var(--border);
+      border-left: 1px solid var(--border);
+      margin-bottom: 36px;
+    }
+    .featured-spec {
+      padding: 16px 20px;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .featured-spec-label {
+      font-size: 0.55rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 4px;
+    }
+    .featured-spec-val {
+      font-size: 0.8rem;
+      color: var(--text);
+    }
+
+    .featured-price-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .featured-price {
+      font-family: var(--font-serif);
+      font-size: 1.8rem;
+      color: var(--text);
+    }
+    .featured-price-note {
+      font-size: 0.7rem;
+      color: var(--text-light);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       6. NEW ARRIVALS
+    ══════════════════════════════════════════════════════════ */
+    .arrivals-section {
+      padding: 96px 0;
+      background: var(--bg-warm);
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 4px;
+      margin-top: 16px;
+    }
+    .filter-btn {
+      font-family: var(--font-sans);
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 8px 18px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn.active,
+    .filter-btn:hover {
+      background: var(--text);
+      color: var(--white);
+      border-color: var(--text);
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+      margin-top: 48px;
+    }
+    @media (max-width: 1100px) { .products-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 768px)  { .products-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; } }
+
+    .product-card {
+      cursor: pointer;
+    }
+
+    .product-card-media {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 3/4;
+      background: var(--bg);
+      margin-bottom: 16px;
+    }
+    .product-card-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s var(--ease-out);
+    }
+    .product-card:hover .product-card-media img { transform: scale(1.05); }
+
+    .product-card-badge {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      font-size: 0.55rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 5px 10px;
+      background: var(--bg-dark);
+      color: var(--white);
+    }
+    .product-card-badge.accent { background: var(--accent); }
+
+    .product-card-wish {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      background: var(--white);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.25s;
+      color: var(--text-mid);
+    }
+    .product-card:hover .product-card-wish { opacity: 1; }
+    .product-card-wish:hover { color: var(--text); }
+
+    .product-card-atc {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0 0;
+      transform: translateY(100%);
+      transition: transform 0.3s var(--ease-out);
+    }
+    .product-card:hover .product-card-atc { transform: translateY(0); }
+    .atc-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--bg-dark);
+      color: var(--white);
+      border: none;
+      font-family: var(--font-sans);
+      font-size: 0.6rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .atc-btn:hover { background: var(--bg-mid); }
+
+    .product-card-cat {
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 6px;
+    }
+    .product-card-name {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      color: var(--text);
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+    .product-card-price-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .product-card-price {
+      font-size: 0.825rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .star-row {
+      display: flex;
+      gap: 2px;
+      align-items: center;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       7. MATERIAL STORIES
+    ══════════════════════════════════════════════════════════ */
+    .materials-section {
+      padding: 96px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .materials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 56px;
+    }
+    @media (max-width: 768px) {
+      .materials-grid { grid-template-columns: 1fr; }
+    }
+
+    .material-tile {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .material-tile-img {
+      aspect-ratio: 3/4;
+      overflow: hidden;
+    }
+    .material-tile-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(0.7) brightness(0.95);
+      transition: transform 0.9s var(--ease-out), filter 0.5s ease;
+    }
+    .material-tile:hover .material-tile-img img {
+      transform: scale(1.06);
+      filter: saturate(0.9) brightness(1);
+    }
+
+    .material-tile-caption {
+      padding: 24px 0 0;
+      border-top: 1px solid var(--border);
+      margin-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .material-tile-name {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      font-style: italic;
+    }
+    .material-tile-desc {
+      font-size: 0.7rem;
+      color: var(--text-mid);
+      max-width: 220px;
+      line-height: 1.6;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       8. FULL-BLEED LIFESTYLE MOMENT
+    ══════════════════════════════════════════════════════════ */
+    .lifestyle-section {
+      position: relative;
+      height: 70vh;
+      min-height: 480px;
+      overflow: hidden;
+    }
+    .lifestyle-section img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 40%;
+    }
+    .lifestyle-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(20,16,12,0.72) 0%, rgba(20,16,12,0.2) 60%, transparent 100%);
+    }
+    .lifestyle-content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 80px;
+    }
+    @media (max-width: 768px) { .lifestyle-content { padding: 0 24px; } }
+
+    .lifestyle-headline {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: clamp(2rem, 5vw, 5rem);
+      color: var(--white);
+      line-height: 1.05;
+      max-width: 600px;
+      margin-bottom: 32px;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       9. TESTIMONIALS — minimal, no cards
+    ══════════════════════════════════════════════════════════ */
+    .testimonials-section {
+      padding: 96px 0;
+      background: var(--white);
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px;
+      margin-top: 64px;
+    }
+    @media (max-width: 900px) {
+      .testimonials-grid { grid-template-columns: 1fr; gap: 40px; }
+    }
+
+    .testimonial {
+      display: flex;
+      flex-direction: column;
+    }
+    .testimonial-mark {
+      font-family: var(--font-serif);
+      font-size: 3rem;
+      color: var(--accent-light);
+      line-height: 0.8;
+      margin-bottom: 20px;
+    }
+    .testimonial-quote {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--text);
+      line-height: 1.6;
+      flex: 1;
+      margin-bottom: 24px;
+    }
+    .testimonial-divider {
+      width: 28px;
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 16px;
+    }
+    .testimonial-author {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+    .testimonial-loc {
+      font-size: 0.65rem;
+      color: var(--text-light);
+      margin-top: 3px;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       10. JOURNAL
+    ══════════════════════════════════════════════════════════ */
+    .journal-section {
+      padding: 96px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .journal-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 56px;
+    }
+    @media (max-width: 900px) {
+      .journal-grid { grid-template-columns: 1fr; }
+    }
+
+    .journal-card { cursor: pointer; }
+    .journal-card-img {
+      aspect-ratio: 16/10;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .journal-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s var(--ease-out);
+    }
+    .journal-card:hover .journal-card-img img { transform: scale(1.05); }
+    .journal-card-cat {
+      margin-bottom: 10px;
+    }
+    .journal-card-title {
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      line-height: 1.3;
+      margin-bottom: 12px;
+      color: var(--text);
+      transition: color 0.2s;
+    }
+    .journal-card:hover .journal-card-title { color: var(--accent); }
+    .journal-card-excerpt {
+      font-size: 0.825rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       11. SERVICES — Aesop-style icon strip
+    ══════════════════════════════════════════════════════════ */
+    .services-section {
+      padding: 72px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    @media (max-width: 768px) {
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .service-item {
+      padding: 0 32px;
+      border-right: 1px solid var(--border);
+      text-align: left;
+    }
+    .service-item:first-child { padding-left: 0; }
+    .service-item:last-child  { border-right: none; }
+    @media (max-width: 768px) {
+      .service-item { padding: 24px 0; border-right: none; border-bottom: 1px solid var(--border); }
+      .service-item:nth-child(even) { padding-left: 20px; }
+    }
+    .service-icon {
+      width: 32px;
+      height: 32px;
+      margin-bottom: 20px;
+      color: var(--accent);
+    }
+    .service-name {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .service-desc {
+      font-size: 0.78rem;
+      color: var(--text-mid);
+      line-height: 1.65;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       12. NEWSLETTER
+    ══════════════════════════════════════════════════════════ */
+    .newsletter-section {
+      padding: 120px 0;
+    }
+    .newsletter-inner {
+      max-width: 560px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .newsletter-headline {
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      margin-bottom: 16px;
+    }
+    .newsletter-subtext {
+      font-size: 0.875rem;
+      color: var(--text-mid);
+      line-height: 1.75;
+      margin-bottom: 40px;
+    }
+    .newsletter-form {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--border);
+    }
+    .newsletter-input {
+      flex: 1;
+      border: none;
+      background: var(--white);
+      padding: 16px 20px;
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      color: var(--text);
+      outline: none;
+    }
+    .newsletter-input::placeholder { color: var(--text-light); }
+    .newsletter-input:focus { background: var(--bg); }
+    .newsletter-submit {
+      padding: 16px 28px;
+      background: var(--bg-dark);
+      color: var(--white);
+      border: none;
+      font-family: var(--font-sans);
+      font-size: 0.6rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .newsletter-submit:hover { background: var(--bg-mid); }
+    .newsletter-note {
+      font-size: 0.65rem;
+      color: var(--text-light);
+      margin-top: 16px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       13. FOOTER
+    ══════════════════════════════════════════════════════════ */
+    .footer {
+      background: var(--bg-dark);
+      padding: 80px 0 40px;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 64px;
+      border-bottom: 1px solid var(--border-dark);
+    }
+    @media (max-width: 1000px) {
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .footer-top { grid-template-columns: 1fr; }
+    }
+
+    .footer-brand-logo {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      letter-spacing: 0.2em;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .footer-brand-sub {
+      font-size: 0.5rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(253,250,245,0.3);
+      margin-bottom: 24px;
+    }
+    .footer-brand-about {
+      font-size: 0.8rem;
+      color: rgba(253,250,245,0.45);
+      line-height: 1.8;
+      max-width: 320px;
+      margin-bottom: 32px;
+    }
+    .footer-social {
+      display: flex;
+      gap: 16px;
+    }
+    .footer-social a {
+      color: rgba(253,250,245,0.4);
+      transition: color 0.2s;
+    }
+    .footer-social a:hover { color: var(--accent-light); }
+
+    .footer-col-title {
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(253,250,245,0.5);
+      margin-bottom: 20px;
+    }
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .footer-links a {
+      font-size: 0.8rem;
+      color: rgba(253,250,245,0.45);
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--white); }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 32px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-copy {
+      font-size: 0.68rem;
+      color: rgba(253,250,245,0.25);
+    }
+    .footer-legal {
+      display: flex;
+      gap: 24px;
+    }
+    .footer-legal a {
+      font-size: 0.68rem;
+      color: rgba(253,250,245,0.25);
+      transition: color 0.2s;
+    }
+    .footer-legal a:hover { color: rgba(253,250,245,0.5); }
+
+    /* Helpers */
+    .star { color: var(--accent); }
   </style>
 </head>
 <body>
 
-<!-- ════════════════════════════════════
+<!-- ══════════════════════════════════════════════════════════
      NAVIGATION
-════════════════════════════════════ -->
-<nav id="navbar" aria-label="Main navigation">
-  <div class="max-w-screen-2xl mx-auto px-6 md:px-10 py-5 flex items-center justify-between">
+══════════════════════════════════════════════════════════ -->
+<header>
+  <nav id="nav" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <div class="nav-inner">
 
-    <!-- Left links -->
-    <ul class="hidden lg:flex items-center gap-8" role="list">
-      <li><a href="#collections" class="label-xs text-stone-950 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Collections</a></li>
-      <li><a href="#new-arrivals" class="label-xs text-stone-950 hover:text-gold-400 transition-colors duration-200 cursor-pointer">New Arrivals</a></li>
-      <li><a href="#craftsmanship" class="label-xs text-stone-950 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Craftsmanship</a></li>
-    </ul>
+        <!-- Left links -->
+        <ul class="nav-links" role="list">
+          <li><a href="#collections">Collections</a></li>
+          <li><a href="#new-arrivals">New Arrivals</a></li>
+          <li><a href="#craftsmanship">Our Makers</a></li>
+          <li><a href="#journal">Journal</a></li>
+        </ul>
 
-    <!-- Logo -->
-    <a href="#" class="absolute left-1/2 -translate-x-1/2" aria-label="Alabis Furniture Home">
-      <div class="flex flex-col items-center">
-        <span style="font-family:'Cormorant',serif; font-size:1.6rem; font-weight:500; letter-spacing:0.18em; color:#1C1917; line-height:1;">ALABIS</span>
-        <span class="label-xs text-stone-600" style="letter-spacing:0.35em; font-size:0.55rem;">FURNITURE</span>
-      </div>
-    </a>
-
-    <!-- Right actions -->
-    <div class="flex items-center gap-5 ml-auto">
-      <!-- Search -->
-      <button aria-label="Search" class="cursor-pointer text-stone-700 hover:text-gold-400 transition-colors duration-200">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      </button>
-      <!-- Wishlist -->
-      <button aria-label="Wishlist" class="hidden sm:block cursor-pointer text-stone-700 hover:text-gold-400 transition-colors duration-200">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-      </button>
-      <!-- Cart -->
-      <button aria-label="Cart (0 items)" class="cursor-pointer relative text-stone-700 hover:text-gold-400 transition-colors duration-200">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        <span class="absolute -top-1.5 -right-1.5 bg-gold-400 text-white rounded-full w-4 h-4 flex items-center justify-center" style="font-size:0.5rem; font-family:'Montserrat',sans-serif; font-weight:600;">0</span>
-      </button>
-      <!-- Mobile menu -->
-      <button aria-label="Open menu" class="lg:hidden cursor-pointer text-stone-700 hover:text-gold-400 transition-colors duration-200">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-      </button>
-    </div>
-
-  </div>
-</nav>
-
-
-<!-- ════════════════════════════════════
-     HERO
-════════════════════════════════════ -->
-<section class="hero-section" aria-label="Hero">
-  <div class="hero-bg" id="heroBg"></div>
-  <div class="hero-grain"></div>
-
-  <!-- Content -->
-  <div class="relative z-10 h-full flex flex-col justify-end pb-16 md:pb-24 px-6 md:px-14 lg:px-20 max-w-screen-2xl mx-auto">
-
-    <div class="max-w-3xl">
-      <p class="label-xs text-gold-300 mb-6">Est. 2010 · Lagos, Nigeria</p>
-      <h1 class="display-xl text-stone-50 mb-6">
-        Crafted<br/>
-        <em style="font-style:italic; font-weight:300;">for the</em><br/>
-        Exceptional
-      </h1>
-      <p class="text-stone-200 text-base md:text-lg font-light leading-relaxed max-w-md mb-10" style="letter-spacing:0.01em;">
-        Heirloom-quality furniture where master artisans and rare materials converge. Every piece tells a story of deliberate restraint.
-      </p>
-      <div class="flex flex-wrap gap-4">
-        <a href="#collections" class="btn-gold">
-          Explore Collections
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <!-- Centered logo -->
+        <a class="nav-logo" href="#" aria-label="Alabis Furniture — Home">
+          <span class="nav-logo-name">ALABIS</span>
+          <span class="nav-logo-sub">Furniture &amp; Interiors</span>
         </a>
-        <a href="#craftsmanship" class="btn-outline-light">Our Story</a>
+
+        <!-- Right actions -->
+        <div class="nav-actions">
+          <button class="nav-icon" aria-label="Search">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </button>
+          <button class="nav-icon" aria-label="Saved items" class="hidden-mobile">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <button class="nav-icon" aria-label="Cart (0 items)" style="position:relative;">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <span style="position:absolute;top:-6px;right:-6px;width:14px;height:14px;background:var(--accent);border-radius:50%;font-size:0.45rem;font-weight:600;display:flex;align-items:center;justify-content:center;color:white;font-family:var(--font-sans);">0</span>
+          </button>
+          <button class="nav-icon nav-hamburger" aria-label="Open menu">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
+          </button>
+        </div>
+
       </div>
     </div>
+  </nav>
+</header>
 
-    <!-- Scroll indicator -->
-    <div class="absolute bottom-8 right-8 md:right-14 flex flex-col items-center gap-3">
-      <div style="width:1px; height:56px; background:linear-gradient(to bottom, transparent, rgba(250,250,249,0.6));"></div>
-      <span class="label-xs text-stone-300" style="writing-mode:vertical-rl; letter-spacing:0.25em;">Scroll</span>
-    </div>
 
+<!-- ══════════════════════════════════════════════════════════
+     HERO — editorial split layout (Aesop / Taeillo inspired)
+══════════════════════════════════════════════════════════ -->
+<main>
+<section class="hero" aria-label="Hero">
+
+  <!-- Left: Full-bleed lifestyle image -->
+  <div class="hero-image">
+    <img id="hero-img"
+         src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1800&q=88&auto=format&fit=crop"
+         alt="Alabis Florence sectional in warm cream linen, styled in a sunlit Lagos living room"
+         fetchpriority="high" />
   </div>
 
-  <!-- Stats strip -->
-  <div class="absolute bottom-0 left-0 right-0 bg-stone-900/70 backdrop-blur-sm border-t border-white/10">
-    <div class="max-w-screen-2xl mx-auto px-6 md:px-14 py-4 grid grid-cols-3 divide-x divide-white/10">
-      <div class="px-4 md:px-8 text-center">
-        <p class="display-md text-stone-50" style="font-size:1.6rem;">14+</p>
-        <p class="label-xs text-stone-400 mt-1">Years Heritage</p>
+  <!-- Right: Editorial text on parchment -->
+  <div class="hero-content">
+    <div class="hero-tag">
+      <span class="hero-tag-line" aria-hidden="true"></span>
+      <span class="label label--accent">Handmade in Nigeria · Est. 2010</span>
+    </div>
+
+    <h1 class="hero-headline">
+      Furniture<br/>
+      built for<br/>
+      <em>living well</em>
+    </h1>
+
+    <p class="hero-body">
+      Every piece in the Alabis atelier begins with a single question: will this still be beautiful in thirty years? We make furniture for considered homes — spaces where nothing is accidental.
+    </p>
+
+    <div class="hero-ctas">
+      <a href="#collections" class="btn btn--dark">
+        Explore Collections
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#craftsmanship" class="btn btn--ghost">
+        <span>Our Story</span>
+        <span class="arrow" aria-hidden="true"></span>
+      </a>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     COLLECTIONS — editorial grid
+══════════════════════════════════════════════════════════ -->
+<section id="collections" class="collections-section">
+  <div class="container">
+
+    <div class="section-header reveal">
+      <div>
+        <span class="label label--accent" style="display:block;margin-bottom:12px;">— Curated for every space</span>
+        <h2 class="section-title">Our Collections</h2>
       </div>
-      <div class="px-4 md:px-8 text-center">
-        <p class="display-md text-stone-50" style="font-size:1.6rem;">340+</p>
-        <p class="label-xs text-stone-400 mt-1">Bespoke Pieces</p>
+      <a href="#" class="btn btn--ghost reveal reveal-d2">
+        <span>View all</span>
+        <span class="arrow" aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div class="collections-grid">
+      <!-- Living Room -->
+      <div class="col-card reveal" tabindex="0" role="button" aria-label="Shop Living Room">
+        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=900&q=82&auto=format&fit=crop"
+             alt="Warm living room with a cream sofa, walnut side table, and warm afternoon light"
+             loading="lazy" />
+        <div class="col-card-overlay" aria-hidden="true"></div>
+        <div class="col-card-info">
+          <p class="col-card-num">01</p>
+          <span class="col-card-name">Living Room</span>
+          <a href="#" class="col-card-link">
+            Shop now
+            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
       </div>
-      <div class="px-4 md:px-8 text-center">
-        <p class="display-md text-stone-50" style="font-size:1.6rem;">98%</p>
-        <p class="label-xs text-stone-400 mt-1">Client Satisfaction</p>
+
+      <!-- Bedroom -->
+      <div class="col-card reveal reveal-d1" tabindex="0" role="button" aria-label="Shop Bedroom">
+        <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=900&q=82&auto=format&fit=crop"
+             alt="Serene bedroom with an upholstered headboard and linen bedding"
+             loading="lazy" />
+        <div class="col-card-overlay" aria-hidden="true"></div>
+        <div class="col-card-info">
+          <p class="col-card-num">02</p>
+          <span class="col-card-name">Bedroom</span>
+          <a href="#" class="col-card-link">
+            Shop now
+            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
       </div>
+
+      <!-- Dining -->
+      <div class="col-card reveal reveal-d2" tabindex="0" role="button" aria-label="Shop Dining">
+        <img src="https://images.unsplash.com/photo-1617806118233-18e1de247200?w=900&q=82&auto=format&fit=crop"
+             alt="Refined dining room with marble table and saddle leather chairs"
+             loading="lazy" />
+        <div class="col-card-overlay" aria-hidden="true"></div>
+        <div class="col-card-info">
+          <p class="col-card-num">03</p>
+          <span class="col-card-name">Dining</span>
+          <a href="#" class="col-card-link">
+            Shop now
+            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Office -->
+      <div class="col-card reveal reveal-d3" tabindex="0" role="button" aria-label="Shop Home Office">
+        <img src="https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=900&q=82&auto=format&fit=crop"
+             alt="Minimal home office with solid oak desk and warm leather chair"
+             loading="lazy" />
+        <div class="col-card-overlay" aria-hidden="true"></div>
+        <div class="col-card-info">
+          <p class="col-card-num">04</p>
+          <span class="col-card-name">Home Office</span>
+          <a href="#" class="col-card-link">
+            Shop now
+            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
 
 
-<!-- ════════════════════════════════════
-     MARQUEE STRIP
-════════════════════════════════════ -->
-<div class="bg-gold-400 py-3 overflow-hidden" aria-hidden="true">
-  <div class="marquee-track">
-    <span class="label-xs text-white px-8">Solid Hardwood</span>
-    <span class="text-white/40 px-2">·</span>
-    <span class="label-xs text-white px-8">Hand-Finished</span>
-    <span class="text-white/40 px-2">·</span>
-    <span class="label-xs text-white px-8">Premium Leather</span>
-    <span class="text-white/40 px-2">·</span>
-    <span class="label-xs text-white px-8">Free White-Glove Delivery</span>
-    <span class="text-white/40 px-2">·</span>
-    <span class="label-xs text-white px-8">10-Year Warranty</span>
-    <span class="text-white/40 px-2">·</span>
-    <span class="label-xs text-white px-8">Bespoke Orders Welcome</span>
-    <span class="text-white/40 px-2">·</span>
-    <span class="label-xs text-white px-8">Sustainable Sourcing</span>
-    <span class="text-white/40 px-2">·</span>
-    <!-- duplicate for seamless loop -->
-    <span class="label-xs text-white px-8">Solid Hardwood</span>
-    <span class="text-white/40 px-2">·</span>
-    <span class="label-xs text-white px-8">Hand-Finished</span>
-    <span class="text-white/40 px-2">·</span>
-    <span class="label-xs text-white px-8">Premium Leather</span>
-    <span class="text-white/40 px-2">·</span>
-    <span class="label-xs text-white px-8">Free White-Glove Delivery</span>
-    <span class="text-white/40 px-2">·</span>
-    <span class="label-xs text-white px-8">10-Year Warranty</span>
-    <span class="text-white/40 px-2">·</span>
-    <span class="label-xs text-white px-8">Bespoke Orders Welcome</span>
-    <span class="text-white/40 px-2">·</span>
-    <span class="label-xs text-white px-8">Sustainable Sourcing</span>
-    <span class="text-white/40 px-2">·</span>
-  </div>
-</div>
+<!-- ══════════════════════════════════════════════════════════
+     BRAND STATEMENT — dark editorial (Aesop inspired)
+══════════════════════════════════════════════════════════ -->
+<section class="brand-statement" id="craftsmanship" aria-labelledby="brand-statement-heading">
+  <div class="container">
+    <div class="statement-inner">
 
-
-<!-- ════════════════════════════════════
-     COLLECTIONS
-════════════════════════════════════ -->
-<section id="collections" class="py-24 md:py-32 px-6 md:px-14 lg:px-20 max-w-screen-2xl mx-auto">
-
-  <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
-    <div class="reveal">
-      <p class="label-xs text-gold-400 mb-3">Curated Spaces</p>
-      <h2 class="display-lg text-stone-950">Our Collections</h2>
-    </div>
-    <a href="#" class="btn-outline self-start md:self-auto reveal reveal-delay-2">View All Collections</a>
-  </div>
-
-  <!-- 3-column grid -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-
-    <!-- Collection 1 — tall -->
-    <div class="product-card md:row-span-2 reveal cursor-pointer" style="aspect-ratio:3/4;" tabindex="0" role="button" aria-label="Living Room Collection">
-      <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=900&q=80&auto=format&fit=crop"
-           alt="Elegant living room with cream sofa and walnut coffee table"
-           class="w-full h-full object-cover"
-           loading="lazy" />
-      <div class="card-overlay"></div>
-      <div class="card-cta">
-        <p class="label-xs text-white/70 mb-1">01 / Living</p>
-        <p class="text-white font-serif text-2xl font-light mb-3">Living Room</p>
-        <span class="btn-gold text-xs py-2.5 px-5">Shop Now</span>
-      </div>
-    </div>
-
-    <!-- Collection 2 -->
-    <div class="product-card reveal reveal-delay-1 cursor-pointer" style="aspect-ratio:4/3;" tabindex="0" role="button" aria-label="Bedroom Collection">
-      <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=900&q=80&auto=format&fit=crop"
-           alt="Serene bedroom with upholstered bed frame and linen bedding"
-           class="w-full h-full object-cover"
-           loading="lazy" />
-      <div class="card-overlay"></div>
-      <div class="card-cta">
-        <p class="label-xs text-white/70 mb-1">02 / Bedroom</p>
-        <p class="text-white font-serif text-2xl font-light mb-3">Bedroom</p>
-        <span class="btn-gold text-xs py-2.5 px-5">Shop Now</span>
-      </div>
-    </div>
-
-    <!-- Collection 3 -->
-    <div class="product-card reveal reveal-delay-2 cursor-pointer" style="aspect-ratio:4/3;" tabindex="0" role="button" aria-label="Dining Room Collection">
-      <img src="https://images.unsplash.com/photo-1617806118233-18e1de247200?w=900&q=80&auto=format&fit=crop"
-           alt="Refined dining room with marble table and leather chairs"
-           class="w-full h-full object-cover"
-           loading="lazy" />
-      <div class="card-overlay"></div>
-      <div class="card-cta">
-        <p class="label-xs text-white/70 mb-1">03 / Dining</p>
-        <p class="text-white font-serif text-2xl font-light mb-3">Dining Room</p>
-        <span class="btn-gold text-xs py-2.5 px-5">Shop Now</span>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-
-<!-- ════════════════════════════════════
-     NEW ARRIVALS
-════════════════════════════════════ -->
-<section id="new-arrivals" class="py-24 md:py-32 bg-stone-100">
-  <div class="px-6 md:px-14 lg:px-20 max-w-screen-2xl mx-auto">
-
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
+      <!-- Left: Quote + copy + stats -->
       <div class="reveal">
-        <p class="label-xs text-gold-400 mb-3">Just Arrived</p>
-        <h2 class="display-lg text-stone-950">New Arrivals</h2>
+        <span class="label label--light" style="display:block;margin-bottom:24px;">— Our Philosophy</span>
+        <blockquote>
+          <p class="statement-quote" id="brand-statement-heading">
+            "We do not make furniture.<br/>
+            We make <em>heirlooms</em><br/>
+            that happen to be useful."
+          </p>
+        </blockquote>
+
+        <div class="statement-copy-block">
+          <div class="statement-divider" aria-hidden="true" style="margin-top:36px;"></div>
+          <p class="statement-copy">
+            Alabis was founded on a conviction that Nigerian homes deserve furniture made with the same care and rigour as the finest European ateliers — but with materials, motifs, and a spirit that is entirely our own.
+          </p>
+          <p class="statement-copy">
+            Every piece is made by hand in our Lagos workshop. No shortcuts. No compromises. Just wood, leather, linen, and decades of craft.
+          </p>
+          <div style="margin-top:8px;">
+            <a href="#" class="btn btn--outline-light">Discover the Atelier</a>
+          </div>
+        </div>
+
+        <div class="statement-stat-row">
+          <div>
+            <span class="statement-stat-num">14</span>
+            <span class="statement-stat-label">Years of craft</span>
+          </div>
+          <div>
+            <span class="statement-stat-num">340+</span>
+            <span class="statement-stat-label">Bespoke pieces made</span>
+          </div>
+          <div>
+            <span class="statement-stat-num">98%</span>
+            <span class="statement-stat-label">Client satisfaction</span>
+          </div>
+        </div>
       </div>
-      <div class="flex gap-2 reveal reveal-delay-2" role="group" aria-label="Filter products">
-        <button class="label-xs px-5 py-2.5 bg-stone-950 text-white cursor-pointer transition-colors duration-200">All</button>
-        <button class="label-xs px-5 py-2.5 border border-stone-300 text-stone-600 hover:bg-stone-200 cursor-pointer transition-colors duration-200">Seating</button>
-        <button class="label-xs px-5 py-2.5 border border-stone-300 text-stone-600 hover:bg-stone-200 cursor-pointer transition-colors duration-200">Tables</button>
-        <button class="label-xs px-5 py-2.5 border border-stone-300 text-stone-600 hover:bg-stone-200 cursor-pointer transition-colors duration-200">Storage</button>
+
+      <!-- Right: Image -->
+      <div class="statement-image reveal reveal-d2">
+        <img src="https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=900&q=82&auto=format&fit=crop"
+             alt="Alabis craftsman hand-finishing a walnut dining table in the Lagos atelier"
+             loading="lazy" />
       </div>
-    </div>
-
-    <!-- Product grid -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-
-      <!-- Product 1 -->
-      <article class="group cursor-pointer reveal" tabindex="0">
-        <div class="overflow-hidden bg-white mb-4 relative" style="aspect-ratio:3/4;">
-          <img src="https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&q=80&auto=format&fit=crop"
-               alt="Austen Walnut Lounge Chair"
-               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-               loading="lazy" />
-          <button aria-label="Add Austen Chair to wishlist" class="absolute top-3 right-3 w-8 h-8 bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer hover:bg-white">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#1C1917" stroke-width="1.5" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </button>
-          <div class="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-stone-950">
-            <button class="w-full label-xs text-white py-2 cursor-pointer hover:text-gold-300 transition-colors duration-150">Add to Cart</button>
-          </div>
-        </div>
-        <p class="label-xs text-stone-500 mb-1">Seating</p>
-        <h3 class="font-serif text-stone-950 text-lg font-light mb-1" style="font-family:'Cormorant',serif;">Austen Walnut Chair</h3>
-        <div class="flex items-center justify-between">
-          <p class="text-stone-950 text-sm font-medium" style="font-family:'Montserrat',sans-serif;">₦485,000</p>
-          <div class="flex gap-1" aria-label="4.8 out of 5 stars">
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </div>
-        </div>
-      </article>
-
-      <!-- Product 2 -->
-      <article class="group cursor-pointer reveal reveal-delay-1" tabindex="0">
-        <div class="overflow-hidden bg-white mb-4 relative" style="aspect-ratio:3/4;">
-          <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80&auto=format&fit=crop"
-               alt="Florence Linen Sofa in cream"
-               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-               loading="lazy" />
-          <span class="absolute top-3 left-3 label-xs bg-stone-950 text-white px-3 py-1">New</span>
-          <button aria-label="Add Florence Sofa to wishlist" class="absolute top-3 right-3 w-8 h-8 bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer hover:bg-white">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#1C1917" stroke-width="1.5" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </button>
-          <div class="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-stone-950">
-            <button class="w-full label-xs text-white py-2 cursor-pointer hover:text-gold-300 transition-colors duration-150">Add to Cart</button>
-          </div>
-        </div>
-        <p class="label-xs text-stone-500 mb-1">Seating</p>
-        <h3 class="font-serif text-stone-950 text-lg font-light mb-1" style="font-family:'Cormorant',serif;">Florence Linen Sofa</h3>
-        <div class="flex items-center justify-between">
-          <p class="text-stone-950 text-sm font-medium" style="font-family:'Montserrat',sans-serif;">₦1,240,000</p>
-          <div class="flex gap-1" aria-label="4.9 out of 5 stars">
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </div>
-        </div>
-      </article>
-
-      <!-- Product 3 -->
-      <article class="group cursor-pointer reveal reveal-delay-2" tabindex="0">
-        <div class="overflow-hidden bg-white mb-4 relative" style="aspect-ratio:3/4;">
-          <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=600&q=80&auto=format&fit=crop"
-               alt="Verona Marble Dining Table"
-               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-               loading="lazy" />
-          <button aria-label="Add Verona Table to wishlist" class="absolute top-3 right-3 w-8 h-8 bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer hover:bg-white">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#1C1917" stroke-width="1.5" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </button>
-          <div class="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-stone-950">
-            <button class="w-full label-xs text-white py-2 cursor-pointer hover:text-gold-300 transition-colors duration-150">Add to Cart</button>
-          </div>
-        </div>
-        <p class="label-xs text-stone-500 mb-1">Tables</p>
-        <h3 class="font-serif text-stone-950 text-lg font-light mb-1" style="font-family:'Cormorant',serif;">Verona Marble Dining</h3>
-        <div class="flex items-center justify-between">
-          <p class="text-stone-950 text-sm font-medium" style="font-family:'Montserrat',sans-serif;">₦2,100,000</p>
-          <div class="flex gap-1" aria-label="4.7 out of 5 stars">
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#E7E5E4" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </div>
-        </div>
-      </article>
-
-      <!-- Product 4 -->
-      <article class="group cursor-pointer reveal reveal-delay-3" tabindex="0">
-        <div class="overflow-hidden bg-white mb-4 relative" style="aspect-ratio:3/4;">
-          <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80&auto=format&fit=crop"
-               alt="Osaka Solid Oak Sideboard"
-               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-               loading="lazy" />
-          <span class="absolute top-3 left-3 label-xs bg-gold-400 text-white px-3 py-1">Bestseller</span>
-          <button aria-label="Add Osaka Sideboard to wishlist" class="absolute top-3 right-3 w-8 h-8 bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer hover:bg-white">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#1C1917" stroke-width="1.5" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </button>
-          <div class="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-stone-950">
-            <button class="w-full label-xs text-white py-2 cursor-pointer hover:text-gold-300 transition-colors duration-150">Add to Cart</button>
-          </div>
-        </div>
-        <p class="label-xs text-stone-500 mb-1">Storage</p>
-        <h3 class="font-serif text-stone-950 text-lg font-light mb-1" style="font-family:'Cormorant',serif;">Osaka Oak Sideboard</h3>
-        <div class="flex items-center justify-between">
-          <p class="text-stone-950 text-sm font-medium" style="font-family:'Montserrat',sans-serif;">₦760,000</p>
-          <div class="flex gap-1" aria-label="5 out of 5 stars">
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </div>
-        </div>
-      </article>
 
     </div>
-
   </div>
 </section>
 
 
-<!-- ════════════════════════════════════
-     FEATURED PIECE (EDITORIAL)
-════════════════════════════════════ -->
-<section class="bg-stone-900 overflow-hidden">
-  <div class="max-w-screen-2xl mx-auto grid md:grid-cols-2">
+<!-- ══════════════════════════════════════════════════════════
+     FEATURED PRODUCT — asymmetric split
+══════════════════════════════════════════════════════════ -->
+<section class="featured-section" aria-label="Featured Product">
+  <div class="container">
+    <div class="reveal" style="margin-bottom:40px;">
+      <span class="label label--accent">— Featured Piece</span>
+    </div>
+  </div>
+
+  <div class="featured-inner">
 
     <!-- Image -->
-    <div class="overflow-hidden" style="aspect-ratio:1/1; min-height:420px;">
-      <img src="https://images.unsplash.com/photo-1540574163026-643ea20ade25?w=1200&q=80&auto=format&fit=crop"
-           alt="The Meridian Sectional — a sculptural statement piece in mocha boucle"
-           class="w-full h-full object-cover hover:scale-105 transition-transform duration-1000"
+    <div class="featured-image reveal">
+      <div class="featured-tag-abs">
+        <span class="label" style="background:var(--bg-dark);color:var(--white);padding:6px 14px;">New Season</span>
+      </div>
+      <img src="https://images.unsplash.com/photo-1540574163026-643ea20ade25?w=1400&q=85&auto=format&fit=crop"
+           alt="The Alabis Meridian Sectional — a sculptural three-seater in mocha boucle with solid beech frame"
            loading="lazy" />
     </div>
 
-    <!-- Copy -->
-    <div class="flex flex-col justify-center px-10 md:px-16 lg:px-20 py-20">
-      <p class="label-xs text-gold-400 mb-5">Featured Piece</p>
-      <h2 class="display-lg text-stone-50 mb-6" style="font-style:italic;">The Meridian<br/>Sectional</h2>
-      <p class="text-stone-300 leading-relaxed mb-4" style="font-size:0.95rem; font-family:'Montserrat',sans-serif; font-weight:300; max-width:400px;">
-        Sculptural depth meets sumptuous comfort. Hand-tufted boucle over a solid beech frame with brushed brass feet — a centrepiece that commands any room.
+    <!-- Content -->
+    <div class="featured-content reveal reveal-d2">
+      <div class="featured-breadcrumb">
+        <span class="label">Seating</span>
+        <span style="width:1px;height:12px;background:var(--border);display:inline-block;margin:0 4px;"></span>
+        <span class="label">Sofas &amp; Sectionals</span>
+      </div>
+
+      <h2 class="featured-name">The Meridian<br/><em style="font-style:italic;">Sectional</em></h2>
+
+      <p class="featured-body">
+        Sculptural depth meets sumptuous comfort. Hand-tufted boucle over a solid beech frame with brushed brass feet — a centrepiece that commands any room without demanding attention.
       </p>
-      <ul class="mb-10 space-y-2">
-        <li class="flex items-center gap-3 text-stone-400" style="font-family:'Montserrat',sans-serif; font-size:0.78rem;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#CA8A04" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-          Solid beech frame · Fully handmade
-        </li>
-        <li class="flex items-center gap-3 text-stone-400" style="font-family:'Montserrat',sans-serif; font-size:0.78rem;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#CA8A04" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-          Available in 8 bespoke fabrics
-        </li>
-        <li class="flex items-center gap-3 text-stone-400" style="font-family:'Montserrat',sans-serif; font-size:0.78rem;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#CA8A04" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-          12–16 week production lead time
-        </li>
-      </ul>
-      <div class="flex flex-wrap items-center gap-5">
-        <a href="#" class="btn-gold">
-          Shop The Meridian
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+
+      <div class="featured-specs" role="list" aria-label="Product specifications">
+        <div class="featured-spec" role="listitem">
+          <p class="featured-spec-label">Material</p>
+          <p class="featured-spec-val">Boucle / Solid Beech</p>
+        </div>
+        <div class="featured-spec" role="listitem">
+          <p class="featured-spec-label">Finish</p>
+          <p class="featured-spec-val">Brushed Brass</p>
+        </div>
+        <div class="featured-spec" role="listitem">
+          <p class="featured-spec-label">Dimensions</p>
+          <p class="featured-spec-val">290 × 180 × 80 cm</p>
+        </div>
+        <div class="featured-spec" role="listitem">
+          <p class="featured-spec-label">Lead Time</p>
+          <p class="featured-spec-val">12–16 weeks</p>
+        </div>
+      </div>
+
+      <div class="featured-price-row">
+        <p class="featured-price">₦3,850,000</p>
+        <p class="featured-price-note">Free white-glove delivery</p>
+      </div>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <a href="#" class="btn btn--dark">
+          Add to Cart
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
         </a>
-        <p class="text-stone-50 font-medium" style="font-family:'Cormorant',serif; font-size:1.4rem; letter-spacing:0.02em;">₦3,850,000</p>
+        <a href="#" class="btn btn--outline">View Full Details</a>
       </div>
-    </div>
 
-  </div>
-</section>
-
-
-<!-- ════════════════════════════════════
-     CRAFTSMANSHIP
-════════════════════════════════════ -->
-<section id="craftsmanship" class="py-24 md:py-36 px-6 md:px-14 lg:px-20 max-w-screen-2xl mx-auto">
-  <div class="grid md:grid-cols-2 gap-14 md:gap-20 items-center">
-
-    <!-- Images mosaic -->
-    <div class="grid grid-cols-2 gap-3 reveal">
-      <div class="col-span-2 overflow-hidden" style="aspect-ratio:16/9;">
-        <img src="https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=900&q=80&auto=format&fit=crop"
-             alt="Craftsman hand-finishing a wooden furniture piece in the workshop"
-             class="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-             loading="lazy" />
-      </div>
-      <div class="overflow-hidden" style="aspect-ratio:4/5;">
-        <img src="https://images.unsplash.com/photo-1565374392748-bf7ed58dfb6b?w=600&q=80&auto=format&fit=crop"
-             alt="Detail of wood joinery in a furniture workshop"
-             class="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-             loading="lazy" />
-      </div>
-      <div class="overflow-hidden" style="aspect-ratio:4/5;">
-        <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=600&q=80&auto=format&fit=crop"
-             alt="Close up of premium linen fabric texture"
-             class="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-             loading="lazy" />
-      </div>
-    </div>
-
-    <!-- Copy -->
-    <div class="reveal reveal-delay-2">
-      <p class="label-xs text-gold-400 mb-5">Our Promise</p>
-      <h2 class="display-lg text-stone-950 mb-8">The Art of<br/><em style="font-style:italic;">Deliberate</em><br/>Making</h2>
-      <p class="text-stone-600 leading-relaxed mb-6" style="font-size:0.95rem; font-family:'Montserrat',sans-serif; font-weight:300;">
-        Every Alabis piece begins as a conversation between master craftsman and raw material. Our Lagos atelier works exclusively with sustainably-harvested hardwoods, hand-selected stone, and textiles that earn their place through texture rather than trend.
+      <p style="font-size:0.7rem;color:var(--text-light);margin-top:20px;">
+        Available in 8 fabrics · Bespoke sizing on request
       </p>
-      <p class="text-stone-600 leading-relaxed mb-10" style="font-size:0.95rem; font-family:'Montserrat',sans-serif; font-weight:300;">
-        We do not rush. A single dining table may take twelve weeks from first sketch to final finish — and that time is precisely what you are investing in.
-      </p>
-
-      <!-- Pillars -->
-      <div class="grid grid-cols-3 gap-6 mb-10">
-        <div>
-          <div class="w-8 h-8 flex items-center justify-center mb-3">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#CA8A04" stroke-width="1.5" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>
-          </div>
-          <p class="label-xs text-stone-950 mb-1">Materials</p>
-          <p class="text-stone-500" style="font-size:0.75rem; font-family:'Montserrat',sans-serif; font-weight:300; line-height:1.5;">Sustainably sourced hardwoods &amp; natural stone</p>
-        </div>
-        <div>
-          <div class="w-8 h-8 flex items-center justify-center mb-3">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#CA8A04" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          </div>
-          <p class="label-xs text-stone-950 mb-1">Time</p>
-          <p class="text-stone-500" style="font-size:0.75rem; font-family:'Montserrat',sans-serif; font-weight:300; line-height:1.5;">8–16 weeks per piece, never rushed</p>
-        </div>
-        <div>
-          <div class="w-8 h-8 flex items-center justify-center mb-3">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#CA8A04" stroke-width="1.5" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          </div>
-          <p class="label-xs text-stone-950 mb-1">Warranty</p>
-          <p class="text-stone-500" style="font-size:0.75rem; font-family:'Montserrat',sans-serif; font-weight:300; line-height:1.5;">10-year structural guarantee, always</p>
-        </div>
-      </div>
-
-      <a href="#" class="btn-outline">Discover Our Process</a>
     </div>
 
   </div>
 </section>
 
 
-<!-- ════════════════════════════════════
-     TESTIMONIALS
-════════════════════════════════════ -->
-<section class="py-24 bg-stone-950 px-6 md:px-14 lg:px-20">
-  <div class="max-w-screen-2xl mx-auto">
+<!-- ══════════════════════════════════════════════════════════
+     NEW ARRIVALS — flat editorial product grid
+══════════════════════════════════════════════════════════ -->
+<section id="new-arrivals" class="arrivals-section" aria-labelledby="arrivals-heading">
+  <div class="container">
 
-    <div class="text-center mb-16 reveal">
-      <p class="label-xs text-gold-400 mb-4">Client Stories</p>
-      <h2 class="display-lg text-stone-50">Voices of<br/><em style="font-style:italic;">our Patrons</em></h2>
+    <div class="section-header reveal">
+      <div>
+        <span class="label" style="display:block;margin-bottom:12px;">— Just arrived</span>
+        <h2 class="section-title" id="arrivals-heading">New Arrivals</h2>
+        <div class="filter-row" role="group" aria-label="Filter by category">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="seating">Seating</button>
+          <button class="filter-btn" data-filter="tables">Tables</button>
+          <button class="filter-btn" data-filter="storage">Storage</button>
+          <button class="filter-btn" data-filter="bedroom">Bedroom</button>
+        </div>
+      </div>
+      <a href="#" class="btn btn--ghost reveal reveal-d2" style="align-self:flex-start;margin-top:8px;">
+        <span>View all products</span>
+        <span class="arrow" aria-hidden="true"></span>
+      </a>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-6">
+    <div class="products-grid">
 
-      <blockquote class="bg-stone-800 p-8 reveal" tabindex="0">
-        <div class="flex gap-1 mb-5" aria-label="5 stars">
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <!-- 1 -->
+      <article class="product-card reveal" tabindex="0" data-cat="seating">
+        <div class="product-card-media">
+          <img src="https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=700&q=82&auto=format&fit=crop"
+               alt="Austen Walnut Lounge Chair — solid walnut frame with hand-stitched saddle leather" loading="lazy" />
+          <button class="product-card-wish" aria-label="Save Austen Chair to wishlist">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <div class="product-card-atc">
+            <button class="atc-btn">Add to Cart</button>
+          </div>
         </div>
-        <p class="text-stone-300 leading-relaxed mb-6" style="font-family:'Cormorant',serif; font-size:1.1rem; font-style:italic;">
-          "The Meridian Sectional has transformed our living room into something from an architectural magazine. The quality is beyond anything I expected — this will outlast our house."
-        </p>
-        <footer class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-full bg-stone-700 flex items-center justify-center">
-            <span style="font-family:'Cormorant',serif; font-size:1rem; color:#CA8A04; font-weight:500;">A</span>
-          </div>
-          <div>
-            <p class="label-xs text-stone-50">Adaeze Okonkwo</p>
-            <p class="text-stone-500" style="font-size:0.65rem; font-family:'Montserrat',sans-serif;">Lagos, Nigeria</p>
-          </div>
-        </footer>
-      </blockquote>
+        <p class="product-card-cat">Seating</p>
+        <h3 class="product-card-name">Austen Walnut Chair</h3>
+        <div class="product-card-price-row">
+          <span class="product-card-price">₦485,000</span>
+          <span class="star-row" aria-label="4.8 stars">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--border)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </span>
+        </div>
+      </article>
 
-      <blockquote class="bg-stone-800 p-8 reveal reveal-delay-1" tabindex="0">
-        <div class="flex gap-1 mb-5" aria-label="5 stars">
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <!-- 2 -->
+      <article class="product-card reveal reveal-d1" tabindex="0" data-cat="seating">
+        <div class="product-card-media">
+          <span class="product-card-badge">New</span>
+          <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=700&q=82&auto=format&fit=crop"
+               alt="Florence Linen Sofa in warm cream — three-seater with solid oak legs" loading="lazy" />
+          <button class="product-card-wish" aria-label="Save Florence Sofa to wishlist">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <div class="product-card-atc">
+            <button class="atc-btn">Add to Cart</button>
+          </div>
         </div>
-        <p class="text-stone-300 leading-relaxed mb-6" style="font-family:'Cormorant',serif; font-size:1.1rem; font-style:italic;">
-          "White-glove delivery, impeccable packaging, and a piece that looks even better in person than in the photographs. Alabis is in a league entirely its own."
-        </p>
-        <footer class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-full bg-stone-700 flex items-center justify-center">
-            <span style="font-family:'Cormorant',serif; font-size:1rem; color:#CA8A04; font-weight:500;">K</span>
-          </div>
-          <div>
-            <p class="label-xs text-stone-50">Kolade Fashola</p>
-            <p class="text-stone-500" style="font-size:0.65rem; font-family:'Montserrat',sans-serif;">Abuja, Nigeria</p>
-          </div>
-        </footer>
-      </blockquote>
+        <p class="product-card-cat">Seating</p>
+        <h3 class="product-card-name">Florence Linen Sofa</h3>
+        <div class="product-card-price-row">
+          <span class="product-card-price">₦1,240,000</span>
+          <span class="star-row" aria-label="5 stars">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </span>
+        </div>
+      </article>
 
-      <blockquote class="bg-stone-800 p-8 reveal reveal-delay-2" tabindex="0">
-        <div class="flex gap-1 mb-5" aria-label="5 stars">
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#CA8A04" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <!-- 3 -->
+      <article class="product-card reveal reveal-d2" tabindex="0" data-cat="tables">
+        <div class="product-card-media">
+          <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=700&q=82&auto=format&fit=crop"
+               alt="Verona Marble Dining Table — Calacatta marble top on a powder-coated steel base" loading="lazy" />
+          <button class="product-card-wish" aria-label="Save Verona Table to wishlist">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <div class="product-card-atc">
+            <button class="atc-btn">Add to Cart</button>
+          </div>
         </div>
-        <p class="text-stone-300 leading-relaxed mb-6" style="font-family:'Cormorant',serif; font-size:1.1rem; font-style:italic;">
-          "We furnished our entire executive suite through Alabis. Three years later, not a scratch, not a creak. The bespoke service was genuinely exceptional."
-        </p>
-        <footer class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-full bg-stone-700 flex items-center justify-center">
-            <span style="font-family:'Cormorant',serif; font-size:1rem; color:#CA8A04; font-weight:500;">T</span>
+        <p class="product-card-cat">Tables</p>
+        <h3 class="product-card-name">Verona Marble Dining</h3>
+        <div class="product-card-price-row">
+          <span class="product-card-price">₦2,100,000</span>
+          <span class="star-row" aria-label="4.7 stars">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--border)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </span>
+        </div>
+      </article>
+
+      <!-- 4 -->
+      <article class="product-card reveal reveal-d3" tabindex="0" data-cat="storage">
+        <div class="product-card-media">
+          <span class="product-card-badge accent">Bestseller</span>
+          <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=700&q=82&auto=format&fit=crop"
+               alt="Osaka Solid Oak Sideboard — four-door, handmade with traditional joinery" loading="lazy" />
+          <button class="product-card-wish" aria-label="Save Osaka Sideboard to wishlist">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <div class="product-card-atc">
+            <button class="atc-btn">Add to Cart</button>
           </div>
-          <div>
-            <p class="label-xs text-stone-50">Titilayo Bankole</p>
-            <p class="text-stone-500" style="font-size:0.65rem; font-family:'Montserrat',sans-serif;">Port Harcourt, Nigeria</p>
-          </div>
-        </footer>
-      </blockquote>
+        </div>
+        <p class="product-card-cat">Storage</p>
+        <h3 class="product-card-name">Osaka Oak Sideboard</h3>
+        <div class="product-card-price-row">
+          <span class="product-card-price">₦760,000</span>
+          <span class="star-row" aria-label="5 stars">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </span>
+        </div>
+      </article>
 
     </div>
   </div>
 </section>
 
 
-<!-- ════════════════════════════════════
-     SERVICES STRIP
-════════════════════════════════════ -->
-<section class="py-16 border-y border-stone-200 px-6 md:px-14 lg:px-20" aria-label="Our services">
-  <div class="max-w-screen-2xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-    <div class="reveal">
-      <div class="flex justify-center mb-3">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#CA8A04" stroke-width="1.2" aria-hidden="true"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+<!-- ══════════════════════════════════════════════════════════
+     MATERIAL STORIES — texture close-ups (TOV inspired)
+══════════════════════════════════════════════════════════ -->
+<section class="materials-section" aria-labelledby="materials-heading">
+  <div class="container">
+
+    <div class="section-header reveal">
+      <div>
+        <span class="label label--accent" style="display:block;margin-bottom:12px;">— The substance of things</span>
+        <h2 class="section-title" id="materials-heading">Materials &amp; Craft</h2>
       </div>
-      <p class="label-xs text-stone-950 mb-1">White-Glove Delivery</p>
-      <p class="text-stone-500" style="font-size:0.72rem; font-family:'Montserrat',sans-serif; font-weight:300; line-height:1.6;">Installation included across Nigeria</p>
     </div>
-    <div class="reveal reveal-delay-1">
-      <div class="flex justify-center mb-3">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#CA8A04" stroke-width="1.2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+
+    <div class="materials-grid">
+
+      <div class="material-tile reveal">
+        <div class="material-tile-img">
+          <img src="https://images.unsplash.com/photo-1565374392748-bf7ed58dfb6b?w=800&q=82&auto=format&fit=crop"
+               alt="Close-up of hand-finished solid walnut wood grain" loading="lazy" />
+        </div>
+        <div class="material-tile-caption">
+          <span class="material-tile-name">Walnut.</span>
+          <p class="material-tile-desc">Sustainably harvested, slow-dried, hand-finished. The warmest hardwood in our palette.</p>
+        </div>
       </div>
-      <p class="label-xs text-stone-950 mb-1">10-Year Warranty</p>
-      <p class="text-stone-500" style="font-size:0.72rem; font-family:'Montserrat',sans-serif; font-weight:300; line-height:1.6;">Full structural guarantee on all pieces</p>
-    </div>
-    <div class="reveal reveal-delay-2">
-      <div class="flex justify-center mb-3">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#CA8A04" stroke-width="1.2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+
+      <div class="material-tile reveal reveal-d1">
+        <div class="material-tile-img">
+          <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=800&q=82&auto=format&fit=crop"
+               alt="Close-up of natural Belgian linen upholstery texture" loading="lazy" />
+        </div>
+        <div class="material-tile-caption">
+          <span class="material-tile-name">Linen.</span>
+          <p class="material-tile-desc">Belgian and Irish linens selected for weight, drape, and their ability to age gracefully.</p>
+        </div>
       </div>
-      <p class="label-xs text-stone-950 mb-1">Bespoke Orders</p>
-      <p class="text-stone-500" style="font-size:0.72rem; font-family:'Montserrat',sans-serif; font-weight:300; line-height:1.6;">Custom sizing, materials &amp; finishes</p>
-    </div>
-    <div class="reveal reveal-delay-3">
-      <div class="flex justify-center mb-3">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#CA8A04" stroke-width="1.2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+
+      <div class="material-tile reveal reveal-d2">
+        <div class="material-tile-img">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=82&auto=format&fit=crop"
+               alt="Close-up of hand-stitched full-grain saddle leather" loading="lazy" />
+        </div>
+        <div class="material-tile-caption">
+          <span class="material-tile-name">Leather.</span>
+          <p class="material-tile-desc">Full-grain, vegetable-tanned hides. Hand-stitched, not stapled. Better at forty than at four.</p>
+        </div>
       </div>
-      <p class="label-xs text-stone-950 mb-1">Showroom Visit</p>
-      <p class="text-stone-500" style="font-size:0.72rem; font-family:'Montserrat',sans-serif; font-weight:300; line-height:1.6;">By appointment · Lagos Island</p>
+
     </div>
   </div>
 </section>
 
 
-<!-- ════════════════════════════════════
-     NEWSLETTER
-════════════════════════════════════ -->
-<section class="py-24 md:py-32 px-6 md:px-14 lg:px-20" aria-labelledby="newsletter-heading">
-  <div class="max-w-2xl mx-auto text-center reveal">
-    <p class="label-xs text-gold-400 mb-4">Stay Informed</p>
-    <h2 class="display-md text-stone-950 mb-4" id="newsletter-heading">The Art of Living Well</h2>
-    <p class="text-stone-500 mb-10 leading-relaxed" style="font-size:0.9rem; font-family:'Montserrat',sans-serif; font-weight:300;">
-      New collections, design insights, and exclusive access to bespoke commissions — delivered once a month, never more.
+<!-- ══════════════════════════════════════════════════════════
+     LIFESTYLE MOMENT — full-bleed (TOV inspired)
+══════════════════════════════════════════════════════════ -->
+<section class="lifestyle-section" aria-label="Lifestyle">
+  <img src="https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?w=2400&q=85&auto=format&fit=crop&crop=center"
+       alt="Alabis-furnished Nigerian living room at golden hour — a complete room composition" />
+  <div class="lifestyle-overlay" aria-hidden="true"></div>
+  <div class="lifestyle-content">
+    <p class="lifestyle-headline">
+      Made in<br/>
+      Nigeria.<br/>
+      <em style="font-style:normal;color:var(--accent-light);">Made to last.</em>
     </p>
-    <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" aria-label="Newsletter signup">
-      <label for="email-input" class="sr-only">Your email address</label>
-      <input id="email-input" type="email" required placeholder="Your email address"
-             class="flex-1 bg-transparent border border-stone-300 px-5 py-3.5 text-stone-950 placeholder-stone-400 focus:outline-none focus:border-stone-950 transition-colors duration-200"
-             style="font-family:'Montserrat',sans-serif; font-size:0.78rem; font-weight:300;" />
-      <button type="submit" class="btn-gold whitespace-nowrap">Subscribe</button>
-    </form>
-    <p class="text-stone-400 mt-4" style="font-size:0.65rem; font-family:'Montserrat',sans-serif; letter-spacing:0.05em;">No spam. Unsubscribe at any time.</p>
+    <a href="#collections" class="btn btn--outline-light">
+      Shop the Look
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
   </div>
 </section>
 
 
-<!-- ════════════════════════════════════
-     FOOTER
-════════════════════════════════════ -->
-<footer class="bg-stone-900 text-stone-400 px-6 md:px-14 lg:px-20 pt-20 pb-10" role="contentinfo">
-  <div class="max-w-screen-2xl mx-auto">
+<!-- ══════════════════════════════════════════════════════════
+     TESTIMONIALS — minimal, no cards (Aesop inspired)
+══════════════════════════════════════════════════════════ -->
+<section class="testimonials-section" aria-labelledby="testimonials-heading">
+  <div class="container">
 
-    <!-- Top row -->
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-10 pb-14 border-b border-stone-800">
+    <div class="section-header reveal">
+      <div>
+        <span class="label" style="display:block;margin-bottom:12px;">— Client voices</span>
+        <h2 class="section-title" id="testimonials-heading">What our<br/><em style="font-style:italic;">patrons say</em></h2>
+      </div>
+    </div>
+
+    <div class="testimonials-grid">
+
+      <figure class="testimonial reveal">
+        <p class="testimonial-mark" aria-hidden="true">"</p>
+        <blockquote>
+          <p class="testimonial-quote">
+            The Meridian Sectional has completely transformed our living room. The quality is beyond anything we expected from any brand — Nigerian or otherwise. This is furniture that will outlast us.
+          </p>
+        </blockquote>
+        <div class="testimonial-divider" aria-hidden="true"></div>
+        <figcaption>
+          <p class="testimonial-author">Adaeze Okonkwo</p>
+          <p class="testimonial-loc">Lagos, Nigeria</p>
+        </figcaption>
+      </figure>
+
+      <figure class="testimonial reveal reveal-d1">
+        <p class="testimonial-mark" aria-hidden="true">"</p>
+        <blockquote>
+          <p class="testimonial-quote">
+            White-glove delivery, immaculate packaging, and a piece that looked even more beautiful in person. Alabis operates at a level that most international furniture brands would struggle to match.
+          </p>
+        </blockquote>
+        <div class="testimonial-divider" aria-hidden="true"></div>
+        <figcaption>
+          <p class="testimonial-author">Kolade Fashola</p>
+          <p class="testimonial-loc">Abuja, Nigeria</p>
+        </figcaption>
+      </figure>
+
+      <figure class="testimonial reveal reveal-d2">
+        <p class="testimonial-mark" aria-hidden="true">"</p>
+        <blockquote>
+          <p class="testimonial-quote">
+            We furnished our entire executive suite through Alabis. Three years on, not a scratch, not a creak. When clients ask where we sourced our furniture, the answer never fails to impress.
+          </p>
+        </blockquote>
+        <div class="testimonial-divider" aria-hidden="true"></div>
+        <figcaption>
+          <p class="testimonial-author">Titilayo Bankole</p>
+          <p class="testimonial-loc">Port Harcourt, Nigeria</p>
+        </figcaption>
+      </figure>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     JOURNAL — editorial blog (Taeillo inspired)
+══════════════════════════════════════════════════════════ -->
+<section id="journal" class="journal-section" aria-labelledby="journal-heading">
+  <div class="container">
+
+    <div class="section-header reveal">
+      <div>
+        <span class="label label--accent" style="display:block;margin-bottom:12px;">— Ideas &amp; Inspiration</span>
+        <h2 class="section-title" id="journal-heading">The Journal</h2>
+      </div>
+      <a href="#" class="btn btn--ghost reveal reveal-d2">
+        <span>Read all stories</span>
+        <span class="arrow" aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div class="journal-grid">
+
+      <article class="journal-card reveal">
+        <div class="journal-card-img">
+          <img src="https://images.unsplash.com/photo-1618219740975-d40978bb7378?w=800&q=82&auto=format&fit=crop"
+               alt="A beautifully layered living room interior demonstrating the concept of warm minimalism"
+               loading="lazy" />
+        </div>
+        <p class="journal-card-cat label label--accent">Design</p>
+        <h3 class="journal-card-title">The Case for Warm Minimalism in the Nigerian Home</h3>
+        <p class="journal-card-excerpt">Why "less is more" only works when the less you have is extraordinary — and how to select pieces that hold a room.</p>
+        <a href="#" class="btn btn--ghost">
+          <span>Read story</span>
+          <span class="arrow" aria-hidden="true"></span>
+        </a>
+      </article>
+
+      <article class="journal-card reveal reveal-d1">
+        <div class="journal-card-img">
+          <img src="https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=800&q=82&auto=format&fit=crop"
+               alt="Hands of an Alabis craftsman working on the joinery of a dining table"
+               loading="lazy" />
+        </div>
+        <p class="journal-card-cat label label--accent">Craftsmanship</p>
+        <h3 class="journal-card-title">Eight Weeks with a Single Dining Table: Our Making Process</h3>
+        <p class="journal-card-excerpt">A behind-the-scenes look at what happens between the first sketch and the final delivery — and why we refuse to rush it.</p>
+        <a href="#" class="btn btn--ghost">
+          <span>Read story</span>
+          <span class="arrow" aria-hidden="true"></span>
+        </a>
+      </article>
+
+      <article class="journal-card reveal reveal-d2">
+        <div class="journal-card-img">
+          <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=800&q=82&auto=format&fit=crop"
+               alt="Detail of natural linen upholstery fabric texture in afternoon light"
+               loading="lazy" />
+        </div>
+        <p class="journal-card-cat label label--accent">Materials</p>
+        <h3 class="journal-card-title">Why We Use Linen, and Why You Should Care</h3>
+        <p class="journal-card-excerpt">The case for natural fibres in a world full of performance fabrics — and how linen gets better every year it's lived with.</p>
+        <a href="#" class="btn btn--ghost">
+          <span>Read story</span>
+          <span class="arrow" aria-hidden="true"></span>
+        </a>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     SERVICES STRIP — Aesop-style icon grid
+══════════════════════════════════════════════════════════ -->
+<section class="services-section" aria-label="Our services">
+  <div class="container">
+    <div class="services-grid">
+
+      <div class="service-item reveal">
+        <svg class="service-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        <p class="service-name">White-Glove Delivery</p>
+        <p class="service-desc">Careful installation by our own team, nationwide across Nigeria.</p>
+      </div>
+
+      <div class="service-item reveal reveal-d1">
+        <svg class="service-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <p class="service-name">10-Year Warranty</p>
+        <p class="service-desc">Full structural guarantee on every piece we make.</p>
+      </div>
+
+      <div class="service-item reveal reveal-d2">
+        <svg class="service-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        <p class="service-name">Bespoke Orders</p>
+        <p class="service-desc">Custom dimensions, materials, and finishes. Nothing is impossible.</p>
+      </div>
+
+      <div class="service-item reveal reveal-d3">
+        <svg class="service-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <p class="service-name">Showroom Visit</p>
+        <p class="service-desc">By appointment. Experience every material and finish in our Lagos showroom.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     NEWSLETTER — Aesop-style minimal
+══════════════════════════════════════════════════════════ -->
+<section class="newsletter-section" aria-labelledby="newsletter-heading">
+  <div class="container">
+    <div class="newsletter-inner reveal">
+      <span class="label" style="display:block;margin-bottom:20px;">— The Alabis Letter</span>
+      <h2 class="newsletter-headline" id="newsletter-heading">
+        The Art of<br/>
+        <em style="font-style:italic;">Living Well</em>
+      </h2>
+      <p class="newsletter-subtext">
+        New collections, design thinking, and exclusive access to bespoke commissions. Sent once a month. Never more.
+      </p>
+      <form class="newsletter-form" aria-label="Newsletter signup">
+        <label for="nl-email" class="sr-only" style="position:absolute;clip:rect(0,0,0,0);">Your email address</label>
+        <input type="email" id="nl-email" class="newsletter-input"
+               placeholder="Your email address" required
+               autocomplete="email" />
+        <button type="submit" class="newsletter-submit">Subscribe</button>
+      </form>
+      <p class="newsletter-note">No spam. Unsubscribe at any time.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════════════ -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+
+    <div class="footer-top">
 
       <!-- Brand -->
-      <div class="col-span-2 md:col-span-2">
-        <div class="mb-5">
-          <p style="font-family:'Cormorant',serif; font-size:1.8rem; font-weight:400; color:#FAFAF9; letter-spacing:0.15em;">ALABIS</p>
-          <p class="label-xs text-stone-500" style="letter-spacing:0.3em; font-size:0.55rem;">FURNITURE</p>
-        </div>
-        <p class="text-stone-400 leading-relaxed mb-6" style="font-size:0.8rem; font-weight:300; max-width:300px; line-height:1.8;">
-          Heirloom furniture crafted in Lagos. Where master artisans and rare materials meet deliberate restraint.
+      <div>
+        <p class="footer-brand-logo">ALABIS</p>
+        <p class="footer-brand-sub">Furniture &amp; Interiors · Lagos</p>
+        <p class="footer-brand-about">
+          Heirloom furniture crafted in Nigeria. Where master artisans and rare materials meet deliberate restraint. Est. 2010.
         </p>
-        <div class="flex gap-4">
-          <a href="#" aria-label="Alabis on Instagram" class="text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        <div class="footer-social" aria-label="Social media links">
+          <a href="#" aria-label="Alabis on Instagram">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
           </a>
-          <a href="#" aria-label="Alabis on Pinterest" class="text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.98.03-2.83.19-.77 1.26-5.33 1.26-5.33s-.32-.64-.32-1.59c0-1.49.86-2.6 1.93-2.6.91 0 1.35.68 1.35 1.5 0 .91-.58 2.28-.88 3.55-.25 1.06.53 1.92 1.57 1.92 1.88 0 3.14-2.43 3.14-5.32 0-2.19-1.48-3.73-3.6-3.73-2.45 0-3.89 1.84-3.89 3.74 0 .74.28 1.53.64 1.96a.26.26 0 0 1 .06.25l-.24.97c-.04.15-.13.18-.3.11-1.12-.52-1.82-2.16-1.82-3.48 0-2.83 2.06-5.43 5.93-5.43 3.11 0 5.53 2.22 5.53 5.19 0 3.1-1.95 5.59-4.66 5.59-.91 0-1.76-.47-2.05-1.03l-.56 2.08c-.2.78-.75 1.76-1.12 2.36.85.26 1.75.4 2.68.4 5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
+          <a href="#" aria-label="Alabis on Pinterest">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.98.03-2.83l1.26-5.33s-.32-.64-.32-1.59c0-1.49.86-2.6 1.93-2.6.91 0 1.35.68 1.35 1.5 0 .91-.58 2.28-.88 3.55-.25 1.06.53 1.92 1.57 1.92 1.88 0 3.14-2.43 3.14-5.32 0-2.19-1.48-3.73-3.6-3.73-2.45 0-3.89 1.84-3.89 3.74 0 .74.28 1.53.64 1.96a.26.26 0 0 1 .06.25l-.24.97c-.04.15-.13.18-.3.11-1.12-.52-1.82-2.16-1.82-3.48 0-2.83 2.06-5.43 5.93-5.43 3.11 0 5.53 2.22 5.53 5.19 0 3.1-1.95 5.59-4.66 5.59-.91 0-1.76-.47-2.05-1.03l-.56 2.08c-.2.78-.75 1.76-1.12 2.36.85.26 1.75.4 2.68.4 5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
           </a>
-          <a href="#" aria-label="Alabis on Twitter / X" class="text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.742l7.725-8.836L2.126 2.25H8.05l4.261 5.636L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
+          <a href="#" aria-label="Alabis on X">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.742l7.725-8.836L2.126 2.25H8.05l4.261 5.636L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
           </a>
         </div>
       </div>
 
-      <!-- Nav columns -->
+      <!-- Shop -->
       <div>
-        <p class="label-xs text-stone-50 mb-5">Shop</p>
-        <ul class="space-y-3" role="list">
-          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Living Room</a></li>
-          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Bedroom</a></li>
-          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Dining Room</a></li>
-          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Office</a></li>
-          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Outdoor</a></li>
-          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">New Arrivals</a></li>
+        <p class="footer-col-title">Shop</p>
+        <ul class="footer-links" role="list">
+          <li><a href="#">Living Room</a></li>
+          <li><a href="#">Bedroom</a></li>
+          <li><a href="#">Dining Room</a></li>
+          <li><a href="#">Home Office</a></li>
+          <li><a href="#">Outdoor</a></li>
+          <li><a href="#">New Arrivals</a></li>
+          <li><a href="#">Sale</a></li>
         </ul>
       </div>
 
+      <!-- Services -->
       <div>
-        <p class="label-xs text-stone-50 mb-5">Services</p>
-        <ul class="space-y-3" role="list">
-          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Bespoke Orders</a></li>
-          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Interior Consultation</a></li>
-          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Showroom Visit</a></li>
-          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Trade Programme</a></li>
-          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Gift Cards</a></li>
+        <p class="footer-col-title">Services</p>
+        <ul class="footer-links" role="list">
+          <li><a href="#">Bespoke Orders</a></li>
+          <li><a href="#">Interior Consultation</a></li>
+          <li><a href="#">Trade Programme</a></li>
+          <li><a href="#">Showroom Visit</a></li>
+          <li><a href="#">Gift Cards</a></li>
+          <li><a href="#">Delivery &amp; Returns</a></li>
         </ul>
       </div>
 
+      <!-- Company -->
       <div>
-        <p class="label-xs text-stone-50 mb-5">Company</p>
-        <ul class="space-y-3" role="list">
-          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Our Story</a></li>
-          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Craftsmanship</a></li>
-          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Sustainability</a></li>
-          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Press</a></li>
-          <li><a href="#" class="text-stone-400 hover:text-stone-100 transition-colors duration-200 cursor-pointer" style="font-size:0.8rem; font-family:'Montserrat',sans-serif; font-weight:300;">Contact</a></li>
+        <p class="footer-col-title">Company</p>
+        <ul class="footer-links" role="list">
+          <li><a href="#">Our Story</a></li>
+          <li><a href="#">The Atelier</a></li>
+          <li><a href="#">Sustainability</a></li>
+          <li><a href="#">The Journal</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Contact Us</a></li>
         </ul>
       </div>
 
     </div>
 
-    <!-- Bottom bar -->
-    <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-      <p style="font-size:0.68rem; font-family:'Montserrat',sans-serif; font-weight:300; color:#57534E;">
-        &copy; 2025 Alabis Furniture. All rights reserved. Lagos, Nigeria.
-      </p>
-      <div class="flex gap-5">
-        <a href="#" class="text-stone-500 hover:text-stone-300 transition-colors duration-200 cursor-pointer" style="font-size:0.68rem; font-family:'Montserrat',sans-serif; font-weight:300;">Privacy Policy</a>
-        <a href="#" class="text-stone-500 hover:text-stone-300 transition-colors duration-200 cursor-pointer" style="font-size:0.68rem; font-family:'Montserrat',sans-serif; font-weight:300;">Terms of Service</a>
-        <a href="#" class="text-stone-500 hover:text-stone-300 transition-colors duration-200 cursor-pointer" style="font-size:0.68rem; font-family:'Montserrat',sans-serif; font-weight:300;">Cookie Policy</a>
-      </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">&copy; 2025 Alabis Furniture Ltd. All rights reserved. Lagos, Nigeria.</p>
+      <nav class="footer-legal" aria-label="Legal links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Cookies</a>
+      </nav>
     </div>
 
   </div>
 </footer>
 
 
-<!-- ════════════════════════════════════
+<!-- ══════════════════════════════════════════════════════════
      JAVASCRIPT
-════════════════════════════════════ -->
+══════════════════════════════════════════════════════════ -->
 <script>
-  // Navbar scroll behavior
-  const navbar = document.getElementById('navbar');
-  window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 40);
-  }, { passive: true });
+  // ── Scroll-aware navbar
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 32);
+  window.addEventListener('scroll', onScroll, { passive: true });
 
-  // Hero image parallax + reveal
-  const heroBg = document.getElementById('heroBg');
-  window.addEventListener('load', () => heroBg.classList.add('loaded'));
+  // ── Hero image zoom on load
+  const heroImg = document.getElementById('hero-img');
+  heroImg.addEventListener('load', () => heroImg.classList.add('loaded'));
+  if (heroImg.complete) heroImg.classList.add('loaded');
 
-  // Scroll reveal
-  const revealEls = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
+  // ── Scroll reveal with IntersectionObserver
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        observer.unobserve(e.target);
+        e.target.classList.add('in');
+        revealObserver.unobserve(e.target);
       }
     });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-  revealEls.forEach(el => observer.observe(el));
+  }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
+  reveals.forEach(el => revealObserver.observe(el));
 
-  // Product filter (UI only)
-  const filterBtns = document.querySelectorAll('[role="group"] button');
+  // ── Product category filter
+  const filterBtns = document.querySelectorAll('.filter-btn');
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      filterBtns.forEach(b => {
-        b.classList.remove('bg-stone-950', 'text-white');
-        b.classList.add('border', 'border-stone-300', 'text-stone-600');
-      });
-      btn.classList.add('bg-stone-950', 'text-white');
-      btn.classList.remove('border', 'border-stone-300', 'text-stone-600');
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
     });
   });
 
-  // Newsletter form
-  const form = document.querySelector('form[aria-label="Newsletter signup"]');
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const btn = form.querySelector('button[type="submit"]');
-    const originalText = btn.textContent;
-    btn.textContent = 'Subscribed';
-    btn.disabled = true;
-    btn.style.background = '#44403C';
-    setTimeout(() => {
-      btn.textContent = originalText;
-      btn.disabled = false;
-      btn.style.background = '';
-      form.reset();
-    }, 3000);
-  });
+  // ── Newsletter
+  const nlForm = document.querySelector('.newsletter-form');
+  if (nlForm) {
+    nlForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const btn = nlForm.querySelector('.newsletter-submit');
+      btn.textContent = 'Subscribed';
+      btn.disabled = true;
+      btn.style.background = 'var(--accent)';
+      setTimeout(() => {
+        btn.textContent = 'Subscribe';
+        btn.disabled = false;
+        btn.style.background = '';
+        nlForm.reset();
+      }, 3500);
+    });
+  }
 </script>
 
 </body>
