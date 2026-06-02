@@ -3,2353 +3,1001 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alabis — Furniture for the Considered Home</title>
-
-  <!-- Fonts: Playfair Display (editorial serif) + DM Sans (clean geometric) -->
+  <title>AdvertisingCo — Performance Marketing for Email Marketing Agencies</title>
+  <meta name="description" content="We fill your agency's calendar with 10–20 qualified discovery calls every month using paid acquisition. Done-for-you client generation for email marketing agencies." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
 
   <style>
-    /* ═══════════════════════════════════
-       DESIGN TOKENS — Aesop warmth palette
-    ═══════════════════════════════════ */
+    /* ── DESIGN TOKENS ───────────────────────────── */
     :root {
-      --bg:           #F5F0E8;
-      --bg-warm:      #EDE7DA;
-      --bg-dark:      #1E1914;
-      --bg-mid:       #2D2720;
-      --text:         #1E1914;
-      --text-mid:     #6B6258;
-      --text-light:   #9A9088;
-      --border:       #D4CABD;
-      --border-dark:  #3A3028;
-      --accent:       #A0855C;
-      --accent-light: #C5A880;
-      --white:        #FDFAF5;
-
-      --font-serif: 'Playfair Display', Georgia, serif;
-      --font-sans:  'DM Sans', system-ui, sans-serif;
-
-      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+      --bg-primary:   #080C14;
+      --bg-secondary: #0D1321;
+      --bg-card:      #111827;
+      --bg-elevated:  #1A2236;
+      --text-primary: #F1F5F9;
+      --text-secondary:#CBD5E1;
+      --text-muted:   #64748B;
+      --accent:       #FF6B35;
+      --accent-hover: #E85520;
+      --accent-glow:  rgba(255,107,53,0.25);
+      --blue:         #3B82F6;
+      --blue-glow:    rgba(59,130,246,0.2);
+      --success:      #22C55E;
+      --border:       rgba(255,255,255,0.07);
+      --border-hover: rgba(255,255,255,0.14);
+      --radius:       12px;
+      --radius-lg:    20px;
     }
 
-    /* ═══════════════════════════════════
-       RESET & BASE
-    ═══════════════════════════════════ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; font-size: 16px; }
+
+    html { scroll-behavior: smooth; }
 
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font-sans);
-      font-weight: 400;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
       line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
-    img { display: block; max-width: 100%; }
-    a   { text-decoration: none; color: inherit; }
-    ::selection { background: var(--accent); color: var(--white); }
-    :focus-visible { outline: 1.5px solid var(--accent); outline-offset: 3px; }
-
-    /* ═══════════════════════════════════
-       TYPOGRAPHY UTILITIES
-    ═══════════════════════════════════ */
-    .label {
-      font-family: var(--font-sans);
-      font-size: 0.625rem;
-      font-weight: 500;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--text-mid);
+    /* ── STICKY NAV ──────────────────────────────── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 40px;
+      background: rgba(8,12,20,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      transition: all 0.3s;
     }
-    .label--light  { color: rgba(253,250,245,0.55); }
-    .label--accent { color: var(--accent); }
-
-    .serif { font-family: var(--font-serif); }
-
-    h1, h2, h3, .h1, .h2, .h3 {
-      font-family: var(--font-serif);
-      font-weight: 400;
-      line-height: 1.05;
-    }
-
-    /* ═══════════════════════════════════
-       LAYOUT
-    ═══════════════════════════════════ */
-    .container {
-      width: 100%;
-      max-width: 1440px;
-      margin: 0 auto;
-      padding: 0 40px;
-    }
-    @media (max-width: 768px) { .container { padding: 0 20px; } }
-
-    .divider { height: 1px; background: var(--border); }
-
-    /* ═══════════════════════════════════
-       BUTTONS
-    ═══════════════════════════════════ */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-family: var(--font-sans);
-      font-size: 0.625rem;
-      font-weight: 500;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.22s ease;
-      border: none;
-      background: none;
-    }
-
-    .btn--dark {
-      background: var(--bg-dark);
-      color: var(--white);
-      padding: 14px 28px;
-    }
-    .btn--dark:hover { background: var(--bg-mid); }
-
-    .btn--outline {
-      border: 1px solid var(--text);
-      color: var(--text);
-      padding: 13px 28px;
-    }
-    .btn--outline:hover { background: var(--text); color: var(--white); }
-
-    .btn--outline-light {
-      border: 1px solid rgba(253,250,245,0.4);
-      color: var(--white);
-      padding: 13px 28px;
-    }
-    .btn--outline-light:hover { border-color: var(--white); background: rgba(253,250,245,0.08); }
-
-    .btn--ghost {
-      color: var(--text);
-      padding: 0;
-      gap: 8px;
-    }
-    .btn--ghost:hover { color: var(--accent); }
-    .btn--ghost .arrow {
-      width: 28px;
-      height: 1px;
-      background: currentColor;
-      position: relative;
-      transition: width 0.25s ease;
-    }
-    .btn--ghost:hover .arrow { width: 38px; }
-    .btn--ghost .arrow::after {
-      content: '';
-      position: absolute;
-      right: 0; top: -3px;
-      width: 7px; height: 7px;
-      border-right: 1px solid currentColor;
-      border-top: 1px solid currentColor;
-      transform: rotate(45deg);
-    }
-
-    /* ═══════════════════════════════════
-       REVEAL ANIMATIONS
-    ═══════════════════════════════════ */
-    .reveal {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
-    }
-    .reveal.in { opacity: 1; transform: none; }
-    .reveal-d1 { transition-delay: 0.1s; }
-    .reveal-d2 { transition-delay: 0.2s; }
-    .reveal-d3 { transition-delay: 0.3s; }
-    .reveal-d4 { transition-delay: 0.4s; }
-
-    @media (prefers-reduced-motion: reduce) {
-      .reveal { opacity: 1; transform: none; transition: none; }
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       1. NAVIGATION
-    ══════════════════════════════════════════════════════════ */
-    #nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      background: var(--bg);
-      transition: border-color 0.3s ease;
-      border-bottom: 1px solid transparent;
-    }
-    #nav.scrolled { border-bottom-color: var(--border); }
-
-    .nav-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 64px;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 36px;
-      list-style: none;
-    }
-    .nav-links a {
-      font-size: 0.625rem;
-      font-weight: 500;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--text-mid);
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--text); }
-
     .nav-logo {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      text-align: center;
-      cursor: pointer;
+      font-family: 'Syne', sans-serif;
+      font-size: 1.25rem; font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.5px;
     }
-    .nav-logo-name {
-      font-family: var(--font-serif);
-      font-size: 1.25rem;
-      font-weight: 400;
-      letter-spacing: 0.22em;
-      color: var(--text);
-      line-height: 1;
-      display: block;
-    }
-    .nav-logo-sub {
-      font-size: 0.5rem;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      color: var(--text-light);
-      display: block;
-      margin-top: 2px;
-    }
-
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-    .nav-icon {
-      cursor: pointer;
-      color: var(--text-mid);
-      transition: color 0.2s;
-      background: none;
-      border: none;
-      padding: 0;
-      display: flex;
-    }
-    .nav-icon:hover { color: var(--text); }
-
-    .nav-hamburger { display: none; }
-    @media (max-width: 900px) {
-      .nav-links { display: none; }
-      .nav-hamburger { display: flex; }
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       2. HERO — editorial split
-    ══════════════════════════════════════════════════════════ */
-    .hero {
-      display: grid;
-      grid-template-columns: 58% 42%;
-      min-height: 100svh;
-      padding-top: 64px;
-    }
-    @media (max-width: 900px) {
-      .hero { grid-template-columns: 1fr; min-height: auto; }
-    }
-
-    .hero-image {
-      position: relative;
-      overflow: hidden;
-    }
-    .hero-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transform: scale(1.04);
-      transition: transform 1.4s var(--ease-out);
-    }
-    .hero-image img.loaded { transform: scale(1); }
-
-    @media (max-width: 900px) {
-      .hero-image { aspect-ratio: 4/3; }
-    }
-
-    .hero-content {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 80px 60px 80px 64px;
-      background: var(--bg);
-    }
-    @media (max-width: 1100px) { .hero-content { padding: 60px 40px; } }
-    @media (max-width: 900px)  { .hero-content { padding: 48px 20px; } }
-
-    .hero-tag {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 32px;
-    }
-    .hero-tag-line {
-      width: 36px;
-      height: 1px;
+    .nav-logo span { color: var(--accent); }
+    .nav-cta {
       background: var(--accent);
+      color: #fff; font-weight: 600; font-size: 0.875rem;
+      padding: 10px 22px; border-radius: 8px;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    .nav-cta:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px var(--accent-glow);
     }
 
-    .hero-headline {
-      font-size: clamp(2.8rem, 4.5vw, 5rem);
-      font-weight: 400;
-      line-height: 1.02;
-      letter-spacing: -0.01em;
-      margin-bottom: 28px;
-      color: var(--text);
-    }
-    .hero-headline em {
-      font-style: italic;
-      color: var(--accent);
-    }
+    /* ── SECTIONS ────────────────────────────────── */
+    section { width: 100%; }
+    .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+    .container-wide { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
 
-    .hero-body {
-      font-size: 0.9rem;
-      color: var(--text-mid);
-      line-height: 1.75;
-      max-width: 360px;
-      margin-bottom: 48px;
-    }
-
-    .hero-ctas {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .hero-scroll {
-      position: absolute;
-      bottom: 32px;
-      left: 32px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .hero-scroll-line {
-      width: 1px;
-      height: 48px;
-      background: rgba(30,25,20,0.25);
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       3. COLLECTIONS
-    ══════════════════════════════════════════════════════════ */
-    .collections-section {
-      padding: 96px 0 80px;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      margin-bottom: 48px;
-    }
-
-    .section-title {
-      font-size: clamp(2rem, 3vw, 3rem);
-    }
-
-    .collections-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 2px;
-    }
-    @media (max-width: 900px) {
-      .collections-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 540px) {
-      .collections-grid { grid-template-columns: 1fr; }
-    }
-
-    .col-card {
+    /* ── HERO ────────────────────────────────────── */
+    .hero {
+      padding: 140px 24px 80px;
+      text-align: center;
+      background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(59,130,246,0.08) 0%, transparent 70%);
       position: relative;
-      overflow: hidden;
-      cursor: pointer;
-      aspect-ratio: 3/4;
     }
-    .col-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.9s var(--ease-out);
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(59,130,246,0.1);
+      border: 1px solid rgba(59,130,246,0.25);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em;
+      color: var(--blue); text-transform: uppercase;
+      margin-bottom: 28px;
     }
-    .col-card:hover img { transform: scale(1.06); }
+    .hero-eyebrow::before { content: ''; width: 7px; height: 7px; background: var(--blue); border-radius: 50%; }
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+      font-weight: 800; line-height: 1.08;
+      letter-spacing: -1.5px;
+      max-width: 820px; margin: 0 auto 24px;
+    }
+    .hero h1 em { font-style: normal; color: var(--accent); }
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--text-secondary);
+      max-width: 600px; margin: 0 auto 44px;
+      line-height: 1.7;
+    }
 
-    .col-card-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(20,16,12,0.75) 0%, rgba(20,16,12,0.1) 50%, transparent 100%);
-      transition: opacity 0.4s ease;
-    }
-
-    .col-card-info {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
+    /* ── SOCIAL PROOF BAR ────────────────────────── */
+    .proof-bar {
+      display: flex; align-items: center; justify-content: center;
+      gap: 40px; flex-wrap: wrap;
       padding: 28px 24px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-secondary);
     }
-    .col-card-num {
-      font-size: 0.55rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: rgba(253,250,245,0.5);
+    .proof-stat { text-align: center; }
+    .proof-stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem; font-weight: 800;
+      color: var(--text-primary); line-height: 1;
+    }
+    .proof-stat-num span { color: var(--accent); }
+    .proof-stat-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; letter-spacing: 0.05em; text-transform: uppercase; }
+    .proof-divider { width: 1px; height: 40px; background: var(--border); }
+
+    /* ── SPOTS BANNER ────────────────────────────── */
+    .spots-banner {
+      background: linear-gradient(135deg, rgba(255,107,53,0.12), rgba(255,107,53,0.05));
+      border: 1px solid rgba(255,107,53,0.3);
+      border-radius: var(--radius);
+      padding: 16px 24px;
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      max-width: 700px; margin: 0 auto 44px;
+      font-size: 0.9rem;
+    }
+    .spots-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
+    .spots-banner strong { color: var(--accent); }
+
+    /* ── VIDEO ───────────────────────────────────── */
+    .vsl-section { padding: 60px 24px; }
+    .video-wrapper {
+      max-width: 860px; margin: 0 auto;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 40px 120px rgba(0,0,0,0.6), 0 0 0 1px var(--border);
+      position: relative;
+      background: var(--bg-card);
+      aspect-ratio: 16/9;
+      cursor: pointer;
+    }
+    .video-thumb {
+      width: 100%; height: 100%; object-fit: cover;
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #0D1321, #1E3A5F);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .video-play-btn {
+      width: 80px; height: 80px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 0 16px var(--accent-glow), 0 20px 60px rgba(255,107,53,0.4);
+      cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      z-index: 2;
+    }
+    .video-play-btn:hover { transform: translate(-50%,-50%) scale(1.1); box-shadow: 0 0 0 20px var(--accent-glow), 0 20px 80px rgba(255,107,53,0.5); }
+    .video-play-btn svg { width: 28px; height: 28px; fill: #fff; margin-left: 4px; }
+    .video-headline {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 32px;
+      background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+      font-size: 1.05rem; font-weight: 600;
+      text-align: center;
+    }
+    .video-caption {
+      text-align: center; margin-top: 16px;
+      font-size: 0.875rem; color: var(--text-muted); font-style: italic;
+    }
+
+    /* ── SECTION HEADERS ─────────────────────────── */
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .section-eyebrow {
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 800; line-height: 1.15; letter-spacing: -0.8px;
+    }
+    .section-title em { font-style: normal; color: var(--accent); }
+    .section-sub {
+      font-size: 1.05rem; color: var(--text-secondary);
+      max-width: 560px; margin: 16px auto 0; line-height: 1.7;
+    }
+
+    /* ── PROBLEM SECTION ─────────────────────────── */
+    .problem-section {
+      padding: 80px 24px;
+      background: var(--bg-secondary);
+    }
+    .problem-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px; max-width: 820px; margin: 0 auto;
+    }
+    .problem-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      display: flex; gap: 14px; align-items: flex-start;
+      transition: border-color 0.2s;
+    }
+    .problem-card:hover { border-color: var(--border-hover); }
+    .problem-icon {
+      width: 38px; height: 38px; min-width: 38px;
+      background: rgba(239,68,68,0.1);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+    .problem-card h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; }
+    .problem-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* ── SOLUTION / HOW IT WORKS ─────────────────── */
+    .solution-section { padding: 80px 24px; }
+    .steps-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .step-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px 28px;
+      position: relative; overflow: hidden;
+      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+    }
+    .step-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255,107,53,0.35);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .step-card::before {
+      content: ''; position: absolute;
+      inset: 0; opacity: 0;
+      background: radial-gradient(ellipse at top left, var(--accent-glow), transparent 70%);
+      transition: opacity 0.3s;
+    }
+    .step-card:hover::before { opacity: 1; }
+    .step-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 3rem; font-weight: 800;
+      color: rgba(255,107,53,0.12); line-height: 1;
+      margin-bottom: 16px;
+    }
+    .step-icon { font-size: 1.6rem; margin-bottom: 14px; }
+    .step-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }
+    .step-card p { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6; }
+
+    /* ── RESULTS ─────────────────────────────────── */
+    .results-section {
+      padding: 80px 24px;
+      background: var(--bg-secondary);
+    }
+    .results-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .result-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      transition: transform 0.25s, border-color 0.25s;
+    }
+    .result-card:hover { transform: translateY(-3px); border-color: var(--border-hover); }
+    .result-metric {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.6rem; font-weight: 800;
+      color: var(--accent); line-height: 1;
       margin-bottom: 6px;
     }
-    .col-card-name {
-      font-family: var(--font-serif);
-      font-size: 1.4rem;
-      font-weight: 400;
-      color: var(--white);
-      display: block;
-      margin-bottom: 12px;
+    .result-label { font-size: 0.95rem; font-weight: 600; margin-bottom: 8px; }
+    .result-desc { font-size: 0.83rem; color: var(--text-muted); line-height: 1.5; }
+    .result-agency {
+      margin-top: 16px; padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem; color: var(--text-muted);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .result-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--blue));
+      font-size: 0.7rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+    }
+
+    /* ── TESTIMONIALS ────────────────────────────── */
+    .testimonials-section { padding: 80px 24px; }
+    .testimonials-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    .testimonial-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      transition: border-color 0.25s;
+    }
+    .testimonial-card:hover { border-color: rgba(255,107,53,0.3); }
+    .testimonial-stars { color: #FBBF24; font-size: 1rem; margin-bottom: 16px; letter-spacing: 2px; }
+    .testimonial-quote {
+      font-size: 0.975rem; line-height: 1.7;
+      color: var(--text-secondary); margin-bottom: 20px;
+      font-style: italic;
+    }
+    .testimonial-author { display: flex; align-items: center; gap: 12px; }
+    .author-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #FF9A6C);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem; color: #fff;
+    }
+    .author-name { font-weight: 600; font-size: 0.9rem; }
+    .author-title { font-size: 0.8rem; color: var(--text-muted); }
+
+    /* ── CTA SECTION ─────────────────────────────── */
+    .cta-section {
+      padding: 100px 24px;
+      text-align: center;
+      background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(255,107,53,0.07) 0%, transparent 70%);
+    }
+    .cta-section h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 800; letter-spacing: -1px;
+      max-width: 700px; margin: 0 auto 20px;
       line-height: 1.1;
     }
-    .col-card-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.6rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: rgba(253,250,245,0.65);
-      opacity: 0;
-      transform: translateY(6px);
-      transition: opacity 0.3s ease, transform 0.3s ease, color 0.2s;
+    .cta-section h2 em { font-style: normal; color: var(--accent); }
+    .cta-section p {
+      font-size: 1.05rem; color: var(--text-secondary);
+      max-width: 520px; margin: 0 auto 40px;
     }
-    .col-card:hover .col-card-link {
-      opacity: 1;
-      transform: none;
+    .guarantee-note {
+      margin-top: 20px; font-size: 0.82rem;
+      color: var(--text-muted); display: flex;
+      align-items: center; justify-content: center; gap: 6px;
     }
-    .col-card-link:hover { color: var(--white); }
+    .guarantee-note svg { width: 15px; height: 15px; fill: var(--success); }
 
-    /* ══════════════════════════════════════════════════════════
-       4. BRAND STATEMENT — dark editorial
-    ══════════════════════════════════════════════════════════ */
-    .brand-statement {
-      background: var(--bg-dark);
-      padding: 120px 0;
+    /* ── BUTTONS ─────────────────────────────────── */
+    .btn-primary {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff; font-weight: 700; font-size: 1.05rem;
+      padding: 18px 44px; border-radius: 10px;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 8px 32px var(--accent-glow);
     }
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 48px var(--accent-glow);
+    }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-secondary {
+      display: inline-block;
+      background: transparent;
+      color: var(--text-primary); font-weight: 600; font-size: 0.95rem;
+      padding: 14px 32px; border-radius: 10px;
+      text-decoration: none;
+      border: 1px solid var(--border-hover);
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--accent); background: rgba(255,107,53,0.05); }
 
-    .statement-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: center;
+    /* ── FAQ ─────────────────────────────────────── */
+    .faq-section {
+      padding: 80px 24px;
+      background: var(--bg-secondary);
     }
-    @media (max-width: 900px) {
-      .statement-inner { grid-template-columns: 1fr; gap: 48px; }
-    }
-
-    .statement-quote {
-      font-family: var(--font-serif);
-      font-style: italic;
-      font-size: clamp(1.8rem, 3vw, 3rem);
-      color: var(--white);
-      line-height: 1.2;
-      font-weight: 400;
-    }
-
-    .statement-quote em {
-      color: var(--accent-light);
-      font-style: italic;
-    }
-
-    .statement-copy {
-      color: rgba(253,250,245,0.6);
-      font-size: 0.875rem;
-      line-height: 1.85;
-      margin-top: 32px;
-      max-width: 400px;
-    }
-
-    .statement-copy-block {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .statement-image {
-      aspect-ratio: 4/5;
+    .faq-list { max-width: 720px; margin: 0 auto; }
+    .faq-item {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 12px;
       overflow: hidden;
     }
-    .statement-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: brightness(0.88) saturate(0.85);
-      transition: transform 0.9s var(--ease-out);
+    .faq-q {
+      width: 100%; background: var(--bg-card);
+      border: none; padding: 22px 26px;
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer; font-size: 0.975rem; font-weight: 600;
+      color: var(--text-primary); text-align: left;
+      transition: background 0.2s;
     }
-    .statement-image:hover img { transform: scale(1.04); }
+    .faq-q:hover { background: var(--bg-elevated); }
+    .faq-chevron {
+      width: 20px; height: 20px; min-width: 20px;
+      border: 1.5px solid var(--text-muted);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.3s, border-color 0.2s;
+    }
+    .faq-chevron svg { width: 10px; fill: none; stroke: var(--text-muted); stroke-width: 2; transition: stroke 0.2s; }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); border-color: var(--accent); }
+    .faq-item.open .faq-chevron svg { stroke: var(--accent); }
+    .faq-a {
+      background: var(--bg-card);
+      padding: 0 26px;
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.3s;
+    }
+    .faq-item.open .faq-a { max-height: 300px; padding: 0 26px 22px; }
+    .faq-a p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; }
 
-    .statement-divider {
-      width: 40px;
-      height: 1px;
-      background: var(--border-dark);
+    /* ── STICKY CTA BAR ──────────────────────────── */
+    .sticky-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 90;
+      background: rgba(8,12,20,0.96);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(255,107,53,0.3);
+      padding: 14px 24px;
+      display: flex; align-items: center; justify-content: center; gap: 20px;
+      transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
     }
+    .sticky-bar.visible { transform: translateY(0); }
+    .sticky-bar-text { font-size: 0.9rem; color: var(--text-secondary); }
+    .sticky-bar-text strong { color: var(--text-primary); }
+    .sticky-countdown {
+      display: flex; gap: 8px; align-items: center;
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem; font-weight: 700; color: var(--accent);
+    }
+    .sticky-countdown span { background: var(--bg-card); padding: 4px 8px; border-radius: 6px; font-size: 1.1rem; }
 
-    .statement-stat-row {
-      display: flex;
-      gap: 40px;
-      margin-top: 40px;
-      padding-top: 40px;
-      border-top: 1px solid var(--border-dark);
-    }
-    .statement-stat-num {
-      font-family: var(--font-serif);
-      font-size: 2rem;
-      color: var(--white);
-      display: block;
-      line-height: 1;
-    }
-    .statement-stat-label {
-      font-size: 0.6rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: rgba(253,250,245,0.4);
-      display: block;
-      margin-top: 6px;
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       5. FEATURED PRODUCT
-    ══════════════════════════════════════════════════════════ */
-    .featured-section {
-      padding: 96px 0;
-      border-top: 1px solid var(--border);
-    }
-
-    .featured-inner {
-      display: grid;
-      grid-template-columns: 55% 45%;
-      gap: 0;
-      align-items: stretch;
-    }
-    @media (max-width: 900px) {
-      .featured-inner { grid-template-columns: 1fr; }
-    }
-
-    .featured-image {
-      position: relative;
-      overflow: hidden;
-      background: var(--bg-warm);
-    }
-    .featured-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      min-height: 560px;
-      transition: transform 0.9s var(--ease-out);
-    }
-    .featured-image:hover img { transform: scale(1.04); }
-
-    .featured-tag-abs {
-      position: absolute;
-      top: 28px;
-      left: 28px;
-    }
-
-    .featured-content {
-      padding: 64px 56px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      background: var(--white);
-    }
-    @media (max-width: 1100px) { .featured-content { padding: 48px 36px; } }
-    @media (max-width: 900px)  { .featured-content { padding: 40px 20px; } }
-
-    .featured-breadcrumb {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 24px;
-    }
-
-    .featured-name {
-      font-size: clamp(1.8rem, 2.8vw, 3.2rem);
-      margin-bottom: 20px;
-    }
-
-    .featured-body {
-      font-size: 0.875rem;
-      color: var(--text-mid);
-      line-height: 1.8;
-      margin-bottom: 32px;
-      max-width: 380px;
-    }
-
-    .featured-specs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0;
-      border-top: 1px solid var(--border);
-      border-left: 1px solid var(--border);
+    /* ── COUNTDOWN IN HERO ───────────────────────── */
+    .hero-countdown {
+      display: inline-flex; gap: 16px;
       margin-bottom: 36px;
     }
-    .featured-spec {
-      padding: 16px 20px;
-      border-right: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-    .featured-spec-label {
-      font-size: 0.55rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--text-light);
-      margin-bottom: 4px;
-    }
-    .featured-spec-val {
-      font-size: 0.8rem;
-      color: var(--text);
-    }
-
-    .featured-price-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 28px;
-    }
-    .featured-price {
-      font-family: var(--font-serif);
-      font-size: 1.8rem;
-      color: var(--text);
-    }
-    .featured-price-note {
-      font-size: 0.7rem;
-      color: var(--text-light);
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       6. NEW ARRIVALS
-    ══════════════════════════════════════════════════════════ */
-    .arrivals-section {
-      padding: 96px 0;
-      background: var(--bg-warm);
-    }
-
-    .filter-row {
-      display: flex;
-      gap: 4px;
-      margin-top: 16px;
-    }
-    .filter-btn {
-      font-family: var(--font-sans);
-      font-size: 0.6rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      padding: 8px 18px;
+    .countdown-unit { text-align: center; }
+    .countdown-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem; font-weight: 800;
+      background: var(--bg-card);
       border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text-mid);
-      cursor: pointer;
-      transition: all 0.2s;
+      border-radius: 10px;
+      padding: 10px 18px;
+      min-width: 70px;
+      display: block; line-height: 1;
     }
-    .filter-btn.active,
-    .filter-btn:hover {
-      background: var(--text);
-      color: var(--white);
-      border-color: var(--text);
-    }
+    .countdown-label { font-size: 0.7rem; color: var(--text-muted); margin-top: 6px; letter-spacing: 0.1em; text-transform: uppercase; }
 
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 28px;
-      margin-top: 48px;
-    }
-    @media (max-width: 1100px) { .products-grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (max-width: 768px)  { .products-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; } }
-
-    .product-card {
-      cursor: pointer;
-    }
-
-    .product-card-media {
-      position: relative;
-      overflow: hidden;
-      aspect-ratio: 3/4;
-      background: var(--bg);
-      margin-bottom: 16px;
-    }
-    .product-card-media img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.8s var(--ease-out);
-    }
-    .product-card:hover .product-card-media img { transform: scale(1.05); }
-
-    .product-card-badge {
-      position: absolute;
-      top: 16px;
-      left: 16px;
-      font-size: 0.55rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      padding: 5px 10px;
-      background: var(--bg-dark);
-      color: var(--white);
-    }
-    .product-card-badge.accent { background: var(--accent); }
-
-    .product-card-wish {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      width: 32px;
-      height: 32px;
-      background: var(--white);
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      opacity: 0;
-      transition: opacity 0.25s;
-      color: var(--text-mid);
-    }
-    .product-card:hover .product-card-wish { opacity: 1; }
-    .product-card-wish:hover { color: var(--text); }
-
-    .product-card-atc {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 0 0;
-      transform: translateY(100%);
-      transition: transform 0.3s var(--ease-out);
-    }
-    .product-card:hover .product-card-atc { transform: translateY(0); }
-    .atc-btn {
-      width: 100%;
-      padding: 12px;
-      background: var(--bg-dark);
-      color: var(--white);
-      border: none;
-      font-family: var(--font-sans);
-      font-size: 0.6rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .atc-btn:hover { background: var(--bg-mid); }
-
-    .product-card-cat {
-      font-size: 0.6rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-light);
-      margin-bottom: 6px;
-    }
-    .product-card-name {
-      font-family: var(--font-serif);
-      font-size: 1.05rem;
-      color: var(--text);
-      margin-bottom: 8px;
-      line-height: 1.2;
-    }
-    .product-card-price-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .product-card-price {
-      font-size: 0.825rem;
-      font-weight: 500;
-      color: var(--text);
-    }
-    .star-row {
-      display: flex;
-      gap: 2px;
-      align-items: center;
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       7. MATERIAL STORIES
-    ══════════════════════════════════════════════════════════ */
-    .materials-section {
-      padding: 96px 0;
+    /* ── FOOTER ──────────────────────────────────── */
+    footer {
+      padding: 40px 24px; text-align: center;
       border-top: 1px solid var(--border);
+      font-size: 0.8rem; color: var(--text-muted);
     }
+    footer a { color: var(--text-muted); text-decoration: none; }
+    footer a:hover { color: var(--text-primary); }
 
-    .materials-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-      margin-top: 56px;
+    /* ── EXIT POPUP ──────────────────────────────── */
+    .exit-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+      display: none; align-items: center; justify-content: center;
+      padding: 24px;
     }
+    .exit-overlay.active { display: flex; }
+    .exit-modal {
+      background: var(--bg-card);
+      border: 1px solid rgba(255,107,53,0.3);
+      border-radius: var(--radius-lg);
+      padding: 48px 40px;
+      max-width: 520px; width: 100%;
+      text-align: center; position: relative;
+    }
+    .exit-close {
+      position: absolute; top: 16px; right: 18px;
+      background: none; border: none; cursor: pointer;
+      color: var(--text-muted); font-size: 1.3rem; line-height: 1;
+    }
+    .exit-modal h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.7rem; font-weight: 800; margin-bottom: 12px;
+    }
+    .exit-modal p { font-size: 0.925rem; color: var(--text-secondary); margin-bottom: 28px; line-height: 1.6; }
+    .exit-modal .btn-primary { width: 100%; display: block; }
+    .exit-dismiss { margin-top: 14px; font-size: 0.82rem; color: var(--text-muted); cursor: pointer; }
+    .exit-dismiss:hover { color: var(--text-primary); }
+
+    /* ── TOAST ───────────────────────────────────── */
+    .proof-toast {
+      position: fixed; bottom: 80px; left: 24px; z-index: 150;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-hover);
+      border-radius: 12px;
+      padding: 12px 18px;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.83rem; color: var(--text-secondary);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      transform: translateY(20px); opacity: 0;
+      transition: transform 0.4s, opacity 0.4s;
+      max-width: 280px;
+    }
+    .proof-toast.show { transform: translateY(0); opacity: 1; }
+    .toast-dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; min-width: 8px; }
+
+    /* ── FADE IN ─────────────────────────────────── */
+    .fade-in { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ──────────────────────────────── */
     @media (max-width: 768px) {
-      .materials-grid { grid-template-columns: 1fr; }
-    }
-
-    .material-tile {
-      position: relative;
-      overflow: hidden;
-      cursor: pointer;
-    }
-    .material-tile-img {
-      aspect-ratio: 3/4;
-      overflow: hidden;
-    }
-    .material-tile-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: saturate(0.7) brightness(0.95);
-      transition: transform 0.9s var(--ease-out), filter 0.5s ease;
-    }
-    .material-tile:hover .material-tile-img img {
-      transform: scale(1.06);
-      filter: saturate(0.9) brightness(1);
-    }
-
-    .material-tile-caption {
-      padding: 24px 0 0;
-      border-top: 1px solid var(--border);
-      margin-top: 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-    }
-    .material-tile-name {
-      font-family: var(--font-serif);
-      font-size: 1.4rem;
-      font-style: italic;
-    }
-    .material-tile-desc {
-      font-size: 0.7rem;
-      color: var(--text-mid);
-      max-width: 220px;
-      line-height: 1.6;
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       8. FULL-BLEED LIFESTYLE MOMENT
-    ══════════════════════════════════════════════════════════ */
-    .lifestyle-section {
-      position: relative;
-      height: 70vh;
-      min-height: 480px;
-      overflow: hidden;
-    }
-    .lifestyle-section img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center 40%;
-    }
-    .lifestyle-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to right, rgba(20,16,12,0.72) 0%, rgba(20,16,12,0.2) 60%, transparent 100%);
-    }
-    .lifestyle-content {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 0 80px;
-    }
-    @media (max-width: 768px) { .lifestyle-content { padding: 0 24px; } }
-
-    .lifestyle-headline {
-      font-family: var(--font-serif);
-      font-style: italic;
-      font-size: clamp(2rem, 5vw, 5rem);
-      color: var(--white);
-      line-height: 1.05;
-      max-width: 600px;
-      margin-bottom: 32px;
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       9. TESTIMONIALS — minimal, no cards
-    ══════════════════════════════════════════════════════════ */
-    .testimonials-section {
-      padding: 96px 0;
-      background: var(--white);
-    }
-
-    .testimonials-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 48px;
-      margin-top: 64px;
-    }
-    @media (max-width: 900px) {
-      .testimonials-grid { grid-template-columns: 1fr; gap: 40px; }
-    }
-
-    .testimonial {
-      display: flex;
-      flex-direction: column;
-    }
-    .testimonial-mark {
-      font-family: var(--font-serif);
-      font-size: 3rem;
-      color: var(--accent-light);
-      line-height: 0.8;
-      margin-bottom: 20px;
-    }
-    .testimonial-quote {
-      font-family: var(--font-serif);
-      font-style: italic;
-      font-size: 1.05rem;
-      color: var(--text);
-      line-height: 1.6;
-      flex: 1;
-      margin-bottom: 24px;
-    }
-    .testimonial-divider {
-      width: 28px;
-      height: 1px;
-      background: var(--border);
-      margin-bottom: 16px;
-    }
-    .testimonial-author {
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text);
-    }
-    .testimonial-loc {
-      font-size: 0.65rem;
-      color: var(--text-light);
-      margin-top: 3px;
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       10. JOURNAL
-    ══════════════════════════════════════════════════════════ */
-    .journal-section {
-      padding: 96px 0;
-      border-top: 1px solid var(--border);
-    }
-
-    .journal-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 32px;
-      margin-top: 56px;
-    }
-    @media (max-width: 900px) {
-      .journal-grid { grid-template-columns: 1fr; }
-    }
-
-    .journal-card { cursor: pointer; }
-    .journal-card-img {
-      aspect-ratio: 16/10;
-      overflow: hidden;
-      margin-bottom: 20px;
-    }
-    .journal-card-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.8s var(--ease-out);
-    }
-    .journal-card:hover .journal-card-img img { transform: scale(1.05); }
-    .journal-card-cat {
-      margin-bottom: 10px;
-    }
-    .journal-card-title {
-      font-family: var(--font-serif);
-      font-size: 1.2rem;
-      line-height: 1.3;
-      margin-bottom: 12px;
-      color: var(--text);
-      transition: color 0.2s;
-    }
-    .journal-card:hover .journal-card-title { color: var(--accent); }
-    .journal-card-excerpt {
-      font-size: 0.825rem;
-      color: var(--text-mid);
-      line-height: 1.7;
-      margin-bottom: 16px;
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       11. SERVICES — Aesop-style icon strip
-    ══════════════════════════════════════════════════════════ */
-    .services-section {
-      padding: 72px 0;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0;
-    }
-    @media (max-width: 768px) {
-      .services-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    .service-item {
-      padding: 0 32px;
-      border-right: 1px solid var(--border);
-      text-align: left;
-    }
-    .service-item:first-child { padding-left: 0; }
-    .service-item:last-child  { border-right: none; }
-    @media (max-width: 768px) {
-      .service-item { padding: 24px 0; border-right: none; border-bottom: 1px solid var(--border); }
-      .service-item:nth-child(even) { padding-left: 20px; }
-    }
-    .service-icon {
-      width: 32px;
-      height: 32px;
-      margin-bottom: 20px;
-      color: var(--accent);
-    }
-    .service-name {
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-    .service-desc {
-      font-size: 0.78rem;
-      color: var(--text-mid);
-      line-height: 1.65;
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       12. NEWSLETTER
-    ══════════════════════════════════════════════════════════ */
-    .newsletter-section {
-      padding: 120px 0;
-    }
-    .newsletter-inner {
-      max-width: 560px;
-      margin: 0 auto;
-      text-align: center;
-    }
-    .newsletter-headline {
-      font-size: clamp(1.8rem, 3vw, 2.8rem);
-      margin-bottom: 16px;
-    }
-    .newsletter-subtext {
-      font-size: 0.875rem;
-      color: var(--text-mid);
-      line-height: 1.75;
-      margin-bottom: 40px;
-    }
-    .newsletter-form {
-      display: flex;
-      gap: 0;
-      border: 1px solid var(--border);
-    }
-    .newsletter-input {
-      flex: 1;
-      border: none;
-      background: var(--white);
-      padding: 16px 20px;
-      font-family: var(--font-sans);
-      font-size: 0.8rem;
-      color: var(--text);
-      outline: none;
-    }
-    .newsletter-input::placeholder { color: var(--text-light); }
-    .newsletter-input:focus { background: var(--bg); }
-    .newsletter-submit {
-      padding: 16px 28px;
-      background: var(--bg-dark);
-      color: var(--white);
-      border: none;
-      font-family: var(--font-sans);
-      font-size: 0.6rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background 0.2s;
-      white-space: nowrap;
-    }
-    .newsletter-submit:hover { background: var(--bg-mid); }
-    .newsletter-note {
-      font-size: 0.65rem;
-      color: var(--text-light);
-      margin-top: 16px;
-      letter-spacing: 0.04em;
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       13. FOOTER
-    ══════════════════════════════════════════════════════════ */
-    .footer {
-      background: var(--bg-dark);
-      padding: 80px 0 40px;
-    }
-
-    .footer-top {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 48px;
-      padding-bottom: 64px;
-      border-bottom: 1px solid var(--border-dark);
-    }
-    @media (max-width: 1000px) {
-      .footer-top { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width: 600px) {
-      .footer-top { grid-template-columns: 1fr; }
-    }
-
-    .footer-brand-logo {
-      font-family: var(--font-serif);
-      font-size: 1.5rem;
-      letter-spacing: 0.2em;
-      color: var(--white);
-      margin-bottom: 4px;
-    }
-    .footer-brand-sub {
-      font-size: 0.5rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: rgba(253,250,245,0.3);
-      margin-bottom: 24px;
-    }
-    .footer-brand-about {
-      font-size: 0.8rem;
-      color: rgba(253,250,245,0.45);
-      line-height: 1.8;
-      max-width: 320px;
-      margin-bottom: 32px;
-    }
-    .footer-social {
-      display: flex;
-      gap: 16px;
-    }
-    .footer-social a {
-      color: rgba(253,250,245,0.4);
-      transition: color 0.2s;
-    }
-    .footer-social a:hover { color: var(--accent-light); }
-
-    .footer-col-title {
-      font-size: 0.6rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(253,250,245,0.5);
-      margin-bottom: 20px;
-    }
-    .footer-links {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .footer-links a {
-      font-size: 0.8rem;
-      color: rgba(253,250,245,0.45);
-      transition: color 0.2s;
-    }
-    .footer-links a:hover { color: var(--white); }
-
-    .footer-bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-top: 32px;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .footer-copy {
-      font-size: 0.68rem;
-      color: rgba(253,250,245,0.25);
-    }
-    .footer-legal {
-      display: flex;
-      gap: 24px;
-    }
-    .footer-legal a {
-      font-size: 0.68rem;
-      color: rgba(253,250,245,0.25);
-      transition: color 0.2s;
-    }
-    .footer-legal a:hover { color: rgba(253,250,245,0.5); }
-
-    /* ── Helpers */
-    .star { color: var(--accent); }
-
-    /* ── Skip link (accessibility) */
-    .skip-link {
-      position: absolute;
-      top: -100%;
-      left: 16px;
-      z-index: 9999;
-      background: var(--bg-dark);
-      color: var(--white);
-      padding: 10px 20px;
-      font-size: 0.75rem;
-      font-family: var(--font-sans);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      transition: top 0.15s ease;
-      text-decoration: none;
-    }
-    .skip-link:focus { top: 16px; }
-
-    /* ── Visually hidden utility */
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-
-    /* ── Enlarged touch targets for nav icons (min 44×44px) */
-    .nav-icon {
-      min-width: 44px;
-      min-height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* ── Active nav link indicator */
-    .nav-links a[aria-current="page"],
-    .nav-links a.active {
-      color: var(--text);
-      border-bottom: 1px solid var(--accent);
-      padding-bottom: 2px;
-    }
-
-    /* ── Mobile nav panel */
-    #mobile-nav {
-      position: fixed;
-      top: 64px; left: 0; right: 0;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
-      z-index: 99;
-      padding: 24px 20px 32px;
-      transform: translateY(-110%);
-      opacity: 0;
-      transition: transform 0.32s var(--ease-out), opacity 0.28s ease;
-      pointer-events: none;
-    }
-    #mobile-nav.open {
-      transform: translateY(0);
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .mobile-nav-links {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-    .mobile-nav-links li { border-bottom: 1px solid var(--border); }
-    .mobile-nav-links a {
-      display: block;
-      padding: 16px 0;
-      font-size: 1.1rem;
-      font-family: var(--font-serif);
-      color: var(--text);
-      transition: color 0.2s;
-    }
-    .mobile-nav-links a:hover { color: var(--accent); }
-    .mobile-nav-actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 24px;
-    }
-
-    /* ── Touch device: always show ATC, wishlist, col-card-link */
-    @media (hover: none) {
-      .product-card-wish {
-        opacity: 1;
-        width: 44px;
-        height: 44px;
-      }
-      .product-card-atc {
-        transform: translateY(0);
-      }
-      .col-card-link {
-        opacity: 1;
-        transform: none;
-      }
-    }
-
-    /* ── Enlarged wishlist button touch target */
-    .product-card-wish {
-      width: 44px;
-      height: 44px;
-    }
-
-    /* ── Filter button aria-pressed active state */
-    .filter-btn[aria-pressed="true"] {
-      background: var(--text);
-      color: var(--white);
-      border-color: var(--text);
-    }
-
-    /* ── will-change hints for GPU compositing */
-    .hero-image img,
-    .col-card img,
-    .product-card-media img,
-    .material-tile-img img,
-    .statement-image img,
-    .featured-image img,
-    .journal-card-img img {
-      will-change: transform;
-    }
-    .reveal {
-      will-change: opacity, transform;
-    }
-    /* Remove will-change after animation completes (set via JS) */
-    .reveal.in {
-      will-change: auto;
-    }
-
-    /* ── Service item mobile fix — consistent padding */
-    @media (max-width: 768px) {
-      .service-item:nth-child(odd)  { border-right: 1px solid var(--border); }
-      .service-item:nth-child(even) { border-right: none; padding-left: 24px; }
-      .service-item:nth-last-child(-n+2) { border-bottom: none; }
-    }
-
-    /* ── Hero mobile: limit image height on small screens */
-    @media (max-width: 540px) {
-      .hero-image { aspect-ratio: 3/2; max-height: 60vw; }
-    }
-
-    /* ── Featured image: remove min-height on mobile */
-    @media (max-width: 900px) {
-      .featured-image img { min-height: unset; }
-    }
-
-    /* ── Focus-visible on collection and product cards */
-    .col-card:focus-visible,
-    .product-card:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 2px;
-    }
-    .col-card:focus-visible .col-card-link {
-      opacity: 1;
-      transform: none;
+      .nav { padding: 14px 20px; }
+      .hero { padding: 100px 20px 60px; }
+      .proof-bar { gap: 24px; }
+      .proof-divider { display: none; }
+      .problem-grid { grid-template-columns: 1fr; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .results-grid { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .sticky-bar { flex-direction: column; gap: 10px; padding: 12px 16px; }
+      .sticky-bar-text { text-align: center; font-size: 0.82rem; }
     }
   </style>
 </head>
+
 <body>
 
-<!-- Skip link: must be first focusable element -->
-<a class="skip-link" href="#main-content">Skip to main content</a>
-
-<!-- ══════════════════════════════════════════════════════════
-     NAVIGATION
-══════════════════════════════════════════════════════════ -->
-<header>
-  <nav id="nav" role="navigation" aria-label="Main navigation">
-    <div class="container">
-      <div class="nav-inner">
-
-        <!-- Left links -->
-        <ul class="nav-links" role="list">
-          <li><a href="#collections">Collections</a></li>
-          <li><a href="#new-arrivals">New Arrivals</a></li>
-          <li><a href="#craftsmanship">Our Makers</a></li>
-          <li><a href="#journal">Journal</a></li>
-        </ul>
-
-        <!-- Centered logo -->
-        <a class="nav-logo" href="#" aria-label="Alabis Furniture — Home">
-          <span class="nav-logo-name">ALABIS</span>
-          <span class="nav-logo-sub">Furniture &amp; Interiors</span>
-        </a>
-
-        <!-- Right actions -->
-        <div class="nav-actions">
-          <button class="nav-icon" aria-label="Search">
-            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          </button>
-          <button class="nav-icon" aria-label="Saved items" style="display:none;" id="nav-wish">
-            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </button>
-          <button class="nav-icon" aria-label="Cart (0 items)" style="position:relative;">
-            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-            <span style="position:absolute;top:-6px;right:-6px;width:14px;height:14px;background:var(--accent);border-radius:50%;font-size:0.45rem;font-weight:600;display:flex;align-items:center;justify-content:center;color:white;font-family:var(--font-sans);">0</span>
-          </button>
-          <button class="nav-icon nav-hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav" id="hamburger">
-            <svg id="hamburger-icon" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
-          </button>
-        </div>
-
-      </div>
-    </div>
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-logo">Advertising<span>Co</span></div>
+    <a href="apply.html" class="nav-cta">Apply Now →</a>
   </nav>
 
-  <!-- Mobile navigation panel -->
-  <div id="mobile-nav" aria-label="Mobile navigation" role="dialog" aria-modal="false" aria-hidden="true">
-    <ul class="mobile-nav-links" role="list">
-      <li><a href="#collections" class="mobile-nav-link">Collections</a></li>
-      <li><a href="#new-arrivals" class="mobile-nav-link">New Arrivals</a></li>
-      <li><a href="#craftsmanship" class="mobile-nav-link">Our Makers</a></li>
-      <li><a href="#journal" class="mobile-nav-link">Journal</a></li>
-    </ul>
-    <div class="mobile-nav-actions">
-      <a href="#" class="btn btn--dark" style="flex:1;justify-content:center;">Shop Now</a>
-      <a href="#" class="btn btn--outline" style="flex:1;justify-content:center;">Book Showroom</a>
-    </div>
-  </div>
-</header>
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="container">
+      <div class="hero-eyebrow">Performance Marketing for Agencies</div>
 
+      <h1>We Fill Your Calendar With <em>Qualified Email Agency Clients</em> — Every Single Month</h1>
 
-<!-- ══════════════════════════════════════════════════════════
-     HERO — editorial split layout (Aesop / Taeillo inspired)
-══════════════════════════════════════════════════════════ -->
-<main id="main-content">
-<section class="hero" aria-label="Hero">
-
-  <!-- Left: Full-bleed lifestyle image -->
-  <div class="hero-image">
-    <img id="hero-img"
-         src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&q=85&auto=format&fit=crop"
-         srcset="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80&auto=format&fit=crop 800w,
-                 https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&q=85&auto=format&fit=crop 1200w,
-                 https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1800&q=88&auto=format&fit=crop 1800w"
-         sizes="(max-width: 900px) 100vw, 58vw"
-         alt="Alabis Florence sectional in warm cream linen, styled in a sunlit Lagos living room"
-         fetchpriority="high"
-         width="1200" height="800" />
-  </div>
-
-  <!-- Right: Editorial text on parchment -->
-  <div class="hero-content">
-    <div class="hero-tag">
-      <span class="hero-tag-line" aria-hidden="true"></span>
-      <span class="label label--accent">Handmade in Nigeria · Est. 2010</span>
-    </div>
-
-    <h1 class="hero-headline">
-      Furniture<br/>
-      built for<br/>
-      <em>living well</em>
-    </h1>
-
-    <p class="hero-body">
-      Every piece in the Alabis atelier begins with a single question: will this still be beautiful in thirty years? We make furniture for considered homes — spaces where nothing is accidental.
-    </p>
-
-    <div class="hero-ctas">
-      <a href="#collections" class="btn btn--dark">
-        Explore Collections
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-      <a href="#craftsmanship" class="btn btn--ghost">
-        <span>Our Story</span>
-        <span class="arrow" aria-hidden="true"></span>
-      </a>
-    </div>
-  </div>
-
-</section>
-
-
-<!-- ══════════════════════════════════════════════════════════
-     COLLECTIONS — editorial grid
-══════════════════════════════════════════════════════════ -->
-<section id="collections" class="collections-section">
-  <div class="container">
-
-    <div class="section-header reveal">
-      <div>
-        <span class="label label--accent" style="display:block;margin-bottom:12px;">— Curated for every space</span>
-        <h2 class="section-title">Our Collections</h2>
-      </div>
-      <a href="#" class="btn btn--ghost reveal reveal-d2">
-        <span>View all</span>
-        <span class="arrow" aria-hidden="true"></span>
-      </a>
-    </div>
-
-    <div class="collections-grid">
-      <!-- Living Room -->
-      <div class="col-card reveal" tabindex="0" role="button" aria-label="Shop Living Room">
-        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=900&q=82&auto=format&fit=crop"
-             alt="Warm living room with a cream sofa, walnut side table, and warm afternoon light"
-             loading="lazy" />
-        <div class="col-card-overlay" aria-hidden="true"></div>
-        <div class="col-card-info">
-          <p class="col-card-num">01</p>
-          <span class="col-card-name">Living Room</span>
-          <a href="#" class="col-card-link">
-            Shop now
-            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <!-- Bedroom -->
-      <div class="col-card reveal reveal-d1" tabindex="0" role="button" aria-label="Shop Bedroom">
-        <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=900&q=82&auto=format&fit=crop"
-             alt="Serene bedroom with an upholstered headboard and linen bedding"
-             loading="lazy" />
-        <div class="col-card-overlay" aria-hidden="true"></div>
-        <div class="col-card-info">
-          <p class="col-card-num">02</p>
-          <span class="col-card-name">Bedroom</span>
-          <a href="#" class="col-card-link">
-            Shop now
-            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <!-- Dining -->
-      <div class="col-card reveal reveal-d2" tabindex="0" role="button" aria-label="Shop Dining">
-        <img src="https://images.unsplash.com/photo-1617806118233-18e1de247200?w=900&q=82&auto=format&fit=crop"
-             alt="Refined dining room with marble table and saddle leather chairs"
-             loading="lazy" />
-        <div class="col-card-overlay" aria-hidden="true"></div>
-        <div class="col-card-info">
-          <p class="col-card-num">03</p>
-          <span class="col-card-name">Dining</span>
-          <a href="#" class="col-card-link">
-            Shop now
-            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <!-- Office -->
-      <div class="col-card reveal reveal-d3" tabindex="0" role="button" aria-label="Shop Home Office">
-        <img src="https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=900&q=82&auto=format&fit=crop"
-             alt="Minimal home office with solid oak desk and warm leather chair"
-             loading="lazy" />
-        <div class="col-card-overlay" aria-hidden="true"></div>
-        <div class="col-card-info">
-          <p class="col-card-num">04</p>
-          <span class="col-card-name">Home Office</span>
-          <a href="#" class="col-card-link">
-            Shop now
-            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════════════════════
-     BRAND STATEMENT — dark editorial (Aesop inspired)
-══════════════════════════════════════════════════════════ -->
-<section class="brand-statement" id="craftsmanship" aria-labelledby="brand-statement-heading">
-  <div class="container">
-    <div class="statement-inner">
-
-      <!-- Left: Quote + copy + stats -->
-      <div class="reveal">
-        <span class="label label--light" style="display:block;margin-bottom:24px;">— Our Philosophy</span>
-        <blockquote>
-          <p class="statement-quote" id="brand-statement-heading">
-            "We do not make furniture.<br/>
-            We make <em>heirlooms</em><br/>
-            that happen to be useful."
-          </p>
-        </blockquote>
-
-        <div class="statement-copy-block">
-          <div class="statement-divider" aria-hidden="true" style="margin-top:36px;"></div>
-          <p class="statement-copy">
-            Alabis was founded on a conviction that Nigerian homes deserve furniture made with the same care and rigour as the finest European ateliers — but with materials, motifs, and a spirit that is entirely our own.
-          </p>
-          <p class="statement-copy">
-            Every piece is made by hand in our Lagos workshop. No shortcuts. No compromises. Just wood, leather, linen, and decades of craft.
-          </p>
-          <div style="margin-top:8px;">
-            <a href="#" class="btn btn--outline-light">Discover the Atelier</a>
-          </div>
-        </div>
-
-        <div class="statement-stat-row">
-          <div>
-            <span class="statement-stat-num">14</span>
-            <span class="statement-stat-label">Years of craft</span>
-          </div>
-          <div>
-            <span class="statement-stat-num">340+</span>
-            <span class="statement-stat-label">Bespoke pieces made</span>
-          </div>
-          <div>
-            <span class="statement-stat-num">98%</span>
-            <span class="statement-stat-label">Client satisfaction</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right: Image -->
-      <div class="statement-image reveal reveal-d2">
-        <img src="https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=900&q=82&auto=format&fit=crop"
-             alt="Alabis craftsman hand-finishing a walnut dining table in the Lagos atelier"
-             loading="lazy" />
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════════════════════
-     FEATURED PRODUCT — asymmetric split
-══════════════════════════════════════════════════════════ -->
-<section class="featured-section" aria-label="Featured Product">
-  <div class="container">
-    <div class="reveal" style="margin-bottom:40px;">
-      <span class="label label--accent">— Featured Piece</span>
-    </div>
-  </div>
-
-  <div class="featured-inner">
-
-    <!-- Image -->
-    <div class="featured-image reveal">
-      <div class="featured-tag-abs">
-        <span class="label" style="background:var(--bg-dark);color:var(--white);padding:6px 14px;">New Season</span>
-      </div>
-      <img src="https://images.unsplash.com/photo-1540574163026-643ea20ade25?w=1400&q=85&auto=format&fit=crop"
-           alt="The Alabis Meridian Sectional — a sculptural three-seater in mocha boucle with solid beech frame"
-           loading="lazy" />
-    </div>
-
-    <!-- Content -->
-    <div class="featured-content reveal reveal-d2">
-      <div class="featured-breadcrumb">
-        <span class="label">Seating</span>
-        <span style="width:1px;height:12px;background:var(--border);display:inline-block;margin:0 4px;"></span>
-        <span class="label">Sofas &amp; Sectionals</span>
-      </div>
-
-      <h2 class="featured-name">The Meridian<br/><em style="font-style:italic;">Sectional</em></h2>
-
-      <p class="featured-body">
-        Sculptural depth meets sumptuous comfort. Hand-tufted boucle over a solid beech frame with brushed brass feet — a centrepiece that commands any room without demanding attention.
+      <p class="hero-sub">
+        Done-for-you paid acquisition that delivers 10–20 discovery calls per month with businesses actively looking to hire an email marketing agency. No cold outreach. No guessing.
       </p>
 
-      <div class="featured-specs" role="list" aria-label="Product specifications">
-        <div class="featured-spec" role="listitem">
-          <p class="featured-spec-label">Material</p>
-          <p class="featured-spec-val">Boucle / Solid Beech</p>
+      <div class="spots-banner">
+        <span class="spots-dot"></span>
+        <span>We only work with <strong>5 email agencies per month</strong> — <strong id="spots-left">3 spots remaining</strong> for June 2025</span>
+      </div>
+
+      <div class="hero-countdown">
+        <div class="countdown-unit">
+          <span class="countdown-num" id="c-hours">23</span>
+          <div class="countdown-label">Hours</div>
         </div>
-        <div class="featured-spec" role="listitem">
-          <p class="featured-spec-label">Finish</p>
-          <p class="featured-spec-val">Brushed Brass</p>
+        <div class="countdown-unit">
+          <span class="countdown-num" id="c-mins">47</span>
+          <div class="countdown-label">Mins</div>
         </div>
-        <div class="featured-spec" role="listitem">
-          <p class="featured-spec-label">Dimensions</p>
-          <p class="featured-spec-val">290 × 180 × 80 cm</p>
-        </div>
-        <div class="featured-spec" role="listitem">
-          <p class="featured-spec-label">Lead Time</p>
-          <p class="featured-spec-val">12–16 weeks</p>
+        <div class="countdown-unit">
+          <span class="countdown-num" id="c-secs">00</span>
+          <div class="countdown-label">Secs</div>
         </div>
       </div>
 
-      <div class="featured-price-row">
-        <p class="featured-price">₦3,850,000</p>
-        <p class="featured-price-note">Free white-glove delivery</p>
-      </div>
-
-      <div style="display:flex;gap:12px;flex-wrap:wrap;">
-        <a href="#" class="btn btn--dark">
-          Add to Cart
-          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        </a>
-        <a href="#" class="btn btn--outline">View Full Details</a>
-      </div>
-
-      <p style="font-size:0.7rem;color:var(--text-light);margin-top:20px;">
-        Available in 8 fabrics · Bespoke sizing on request
-      </p>
+      <a href="apply.html" class="btn-primary">Check If Your Agency Qualifies →</a>
+      <p style="margin-top:14px;font-size:0.82rem;color:var(--text-muted);">Free 30-min strategy call · No obligation · Results guaranteed</p>
     </div>
+  </section>
 
+  <!-- PROOF BAR -->
+  <div class="proof-bar fade-in">
+    <div class="proof-stat">
+      <div class="proof-stat-num">127<span>+</span></div>
+      <div class="proof-stat-label">Agencies Scaled</div>
+    </div>
+    <div class="proof-divider"></div>
+    <div class="proof-stat">
+      <div class="proof-stat-num"><span>$</span>42M</div>
+      <div class="proof-stat-label">Revenue Generated</div>
+    </div>
+    <div class="proof-divider"></div>
+    <div class="proof-stat">
+      <div class="proof-stat-num">14<span>k+</span></div>
+      <div class="proof-stat-label">Qualified Calls Booked</div>
+    </div>
+    <div class="proof-divider"></div>
+    <div class="proof-stat">
+      <div class="proof-stat-num">3.2<span>x</span></div>
+      <div class="proof-stat-label">Average ROAS</div>
+    </div>
   </div>
-</section>
 
-
-<!-- ══════════════════════════════════════════════════════════
-     NEW ARRIVALS — flat editorial product grid
-══════════════════════════════════════════════════════════ -->
-<section id="new-arrivals" class="arrivals-section" aria-labelledby="arrivals-heading">
-  <div class="container">
-
-    <div class="section-header reveal">
-      <div>
-        <span class="label" style="display:block;margin-bottom:12px;">— Just arrived</span>
-        <h2 class="section-title" id="arrivals-heading">New Arrivals</h2>
-        <div class="filter-row" role="group" aria-label="Filter by category">
-          <button class="filter-btn active" data-filter="all" aria-pressed="true">All</button>
-          <button class="filter-btn" data-filter="seating" aria-pressed="false">Seating</button>
-          <button class="filter-btn" data-filter="tables" aria-pressed="false">Tables</button>
-          <button class="filter-btn" data-filter="storage" aria-pressed="false">Storage</button>
-          <button class="filter-btn" data-filter="bedroom" aria-pressed="false">Bedroom</button>
+  <!-- VSL -->
+  <section class="vsl-section fade-in">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-eyebrow">Watch First</div>
+        <h2 class="section-title">How We Get Email Agencies<br><em>10–20 Qualified Calls/Month</em></h2>
+      </div>
+      <div class="video-wrapper">
+        <div class="video-thumb">
+          <div class="video-play-btn" onclick="handleVideoPlay()">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <div class="video-headline">▶ Watch: The 3-Channel System That Fills Email Agency Pipelines (12 min)</div>
         </div>
       </div>
-      <a href="#" class="btn btn--ghost reveal reveal-d2" style="align-self:flex-start;margin-top:8px;">
-        <span>View all products</span>
-        <span class="arrow" aria-hidden="true"></span>
-      </a>
+      <p class="video-caption">Over 8,400 agency owners have watched this — most apply within 24 hours</p>
     </div>
+  </section>
 
-    <div class="products-grid">
-
-      <!-- 1 -->
-      <article class="product-card reveal" tabindex="0" data-cat="seating">
-        <div class="product-card-media">
-          <img src="https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=700&q=82&auto=format&fit=crop"
-               alt="Austen Walnut Lounge Chair — solid walnut frame with hand-stitched saddle leather" loading="lazy" />
-          <button class="product-card-wish" aria-label="Save Austen Chair to wishlist">
-            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </button>
-          <div class="product-card-atc">
-            <button class="atc-btn">Add to Cart</button>
+  <!-- PROBLEM -->
+  <section class="problem-section">
+    <div class="container">
+      <div class="section-header fade-in">
+        <div class="section-eyebrow">The Real Problem</div>
+        <h2 class="section-title">Sound Familiar?</h2>
+        <p class="section-sub">Most email agencies are incredible at the work — but terrible at getting clients. Here's what we hear every week:</p>
+      </div>
+      <div class="problem-grid">
+        <div class="problem-card fade-in">
+          <div class="problem-icon">📉</div>
+          <div>
+            <h4>Feast-or-famine pipeline</h4>
+            <p>You close a few clients then spend the next 3 months scrambling to replace them when they churn.</p>
           </div>
         </div>
-        <p class="product-card-cat">Seating</p>
-        <h3 class="product-card-name">Austen Walnut Chair</h3>
-        <div class="product-card-price-row">
-          <span class="product-card-price">₦485,000</span>
-          <span class="star-row" aria-label="4.8 stars">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--border)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </span>
-        </div>
-      </article>
-
-      <!-- 2 -->
-      <article class="product-card reveal reveal-d1" tabindex="0" data-cat="seating">
-        <div class="product-card-media">
-          <span class="product-card-badge">New</span>
-          <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=700&q=82&auto=format&fit=crop"
-               alt="Florence Linen Sofa in warm cream — three-seater with solid oak legs" loading="lazy" />
-          <button class="product-card-wish" aria-label="Save Florence Sofa to wishlist">
-            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </button>
-          <div class="product-card-atc">
-            <button class="atc-btn">Add to Cart</button>
+        <div class="problem-card fade-in">
+          <div class="problem-icon">🥶</div>
+          <div>
+            <h4>Cold outreach is killing you</h4>
+            <p>Hundreds of LinkedIn DMs, zero replies. Cold email sequences that never convert. It's soul-destroying.</p>
           </div>
         </div>
-        <p class="product-card-cat">Seating</p>
-        <h3 class="product-card-name">Florence Linen Sofa</h3>
-        <div class="product-card-price-row">
-          <span class="product-card-price">₦1,240,000</span>
-          <span class="star-row" aria-label="5 stars">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </span>
-        </div>
-      </article>
-
-      <!-- 3 -->
-      <article class="product-card reveal reveal-d2" tabindex="0" data-cat="tables">
-        <div class="product-card-media">
-          <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=700&q=82&auto=format&fit=crop"
-               alt="Verona Marble Dining Table — Calacatta marble top on a powder-coated steel base" loading="lazy" />
-          <button class="product-card-wish" aria-label="Save Verona Table to wishlist">
-            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </button>
-          <div class="product-card-atc">
-            <button class="atc-btn">Add to Cart</button>
+        <div class="problem-card fade-in">
+          <div class="problem-icon">🤞</div>
+          <div>
+            <h4>Referrals you can't control</h4>
+            <p>When referrals dry up, so does your revenue. You can't build a real agency on referrals alone.</p>
           </div>
         </div>
-        <p class="product-card-cat">Tables</p>
-        <h3 class="product-card-name">Verona Marble Dining</h3>
-        <div class="product-card-price-row">
-          <span class="product-card-price">₦2,100,000</span>
-          <span class="star-row" aria-label="4.7 stars">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--border)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </span>
-        </div>
-      </article>
-
-      <!-- 4 -->
-      <article class="product-card reveal reveal-d3" tabindex="0" data-cat="storage">
-        <div class="product-card-media">
-          <span class="product-card-badge accent">Bestseller</span>
-          <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=700&q=82&auto=format&fit=crop"
-               alt="Osaka Solid Oak Sideboard — four-door, handmade with traditional joinery" loading="lazy" />
-          <button class="product-card-wish" aria-label="Save Osaka Sideboard to wishlist">
-            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </button>
-          <div class="product-card-atc">
-            <button class="atc-btn">Add to Cart</button>
+        <div class="problem-card fade-in">
+          <div class="problem-icon">💸</div>
+          <div>
+            <h4>Wasted ad spend with no system</h4>
+            <p>You've tried running ads yourself or hired a generalist agency. Nothing converts because nobody understands your buyer.</p>
           </div>
         </div>
-        <p class="product-card-cat">Storage</p>
-        <h3 class="product-card-name">Osaka Oak Sideboard</h3>
-        <div class="product-card-price-row">
-          <span class="product-card-price">₦760,000</span>
-          <span class="star-row" aria-label="5 stars">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </span>
-        </div>
-      </article>
+      </div>
+    </div>
+  </section>
 
+  <!-- HOW IT WORKS -->
+  <section class="solution-section">
+    <div class="container">
+      <div class="section-header fade-in">
+        <div class="section-eyebrow">The System</div>
+        <h2 class="section-title">Our 3-Channel <em>Agency Growth Engine</em></h2>
+        <p class="section-sub">We combine paid social, search intent, and retargeting into one seamless client acquisition system built specifically for email agencies.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card fade-in">
+          <div class="step-num">01</div>
+          <div class="step-icon">🎯</div>
+          <h3>Precision Audience Build</h3>
+          <p>We map your ideal client profile — business size, revenue, industry, role — and build custom audiences across Meta and Google that match your best current clients.</p>
+        </div>
+        <div class="step-card fade-in">
+          <div class="step-icon">⚡</div>
+          <div class="step-num">02</div>
+          <h3>Conversion-Optimised Ad Creative</h3>
+          <p>Our team writes and designs direct-response ads that speak your buyers' language. We test 12–20 variants per month until we find what converts, then scale it hard.</p>
+        </div>
+        <div class="step-card fade-in">
+          <div class="step-icon">📅</div>
+          <div class="step-num">03</div>
+          <h3>Booked-Call Delivery System</h3>
+          <p>Leads don't go into a CRM and die. Our booking funnel qualifies, nurtures, and auto-schedules discovery calls directly onto your calendar — pre-sold and ready.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="results-section">
+    <div class="container">
+      <div class="section-header fade-in">
+        <div class="section-eyebrow">Client Results</div>
+        <h2 class="section-title">Real Numbers From <em>Real Agencies</em></h2>
+      </div>
+      <div class="results-grid">
+        <div class="result-card fade-in">
+          <div class="result-metric">22</div>
+          <div class="result-label">Qualified Calls in Month 1</div>
+          <div class="result-desc">From $0 in paid ads to a fully booked calendar in 6 weeks. Closed 4 new retainer clients at $3,500/mo each.</div>
+          <div class="result-agency">
+            <div class="result-avatar">JR</div>
+            <span>James R. · Founder, Inbox Empire Agency · NYC</span>
+          </div>
+        </div>
+        <div class="result-card fade-in">
+          <div class="result-metric">4.1x</div>
+          <div class="result-label">ROAS on Ad Spend</div>
+          <div class="result-desc">Spent $8,200 in Q1, generated $33,800 in new MRR. Now scaling to $15k/mo ad budget with confidence.</div>
+          <div class="result-agency">
+            <div class="result-avatar">SC</div>
+            <span>Sarah C. · CEO, FlowMail Agency · London</span>
+          </div>
+        </div>
+        <div class="result-card fade-in">
+          <div class="result-metric">$18k</div>
+          <div class="result-label">New MRR in 90 Days</div>
+          <div class="result-desc">Went from struggling to find clients to turning away prospects. Built a waitlist for the first time in 3 years of running the agency.</div>
+          <div class="result-agency">
+            <div class="result-avatar">MT</div>
+            <span>Marcus T. · Director, SendBetter Co. · Austin</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials-section">
+    <div class="container">
+      <div class="section-header fade-in">
+        <div class="section-eyebrow">What Agencies Say</div>
+        <h2 class="section-title">Don't Take Our Word For It</h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card fade-in">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-quote">"Within 8 weeks we had more leads than we could handle. I actually had to pause the campaigns because my team was at capacity. That's a problem I never expected to have."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">AL</div>
+            <div>
+              <div class="author-name">Amanda L.</div>
+              <div class="author-title">Founder · The Open Rate Agency</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card fade-in">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-quote">"I'd burned $14k with two other agencies before finding AdvertisingCo. The difference is they actually understand what makes an email agency buyer tick. Our cost per booked call dropped 68%."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">DP</div>
+            <div>
+              <div class="author-name">David P.</div>
+              <div class="author-title">CEO · Klaviyo Kings</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card fade-in">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-quote">"The onboarding was fast, the creative was sharp, and the results were there by week 3. We've now been with them for 14 months and have grown from 6 to 22 retainer clients."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">RN</div>
+            <div>
+              <div class="author-name">Rachel N.</div>
+              <div class="author-title">Managing Director · Sequence Digital</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card fade-in">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-quote">"Finally — an ads team that can speak the language of our buyers. They know what e-commerce founders and DTC brands actually care about, and the ads reflect that."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">KO</div>
+            <div>
+              <div class="author-name">Kevin O.</div>
+              <div class="author-title">Partner · Flowdesk Agency</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="fade-in">
+        <h2>Ready to Stop Chasing Clients and <em>Start Choosing Them?</em></h2>
+        <p>Apply for a free 30-minute strategy session. We'll audit your current acquisition, show you exactly where the gaps are, and map out what a full pipeline looks like for your agency.</p>
+        <a href="apply.html" class="btn-primary">Apply for Your Strategy Session →</a>
+        <div class="guarantee-note">
+          <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span style="color:var(--success)">No obligation · 100% free · Results guarantee on paid engagements</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section">
+    <div class="container">
+      <div class="section-header fade-in">
+        <div class="section-eyebrow">FAQ</div>
+        <h2 class="section-title">Common Questions</h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item fade-in">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            What kind of agencies do you work with?
+            <span class="faq-chevron"><svg viewBox="0 0 12 8"><path d="M1 1l5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <div class="faq-a"><p>We exclusively work with email marketing agencies — whether you focus on Klaviyo, ActiveCampaign, Mailchimp, or custom ESP builds. You should be charging at least $1,500/month per retainer client and have at least 2 active clients. We're not the right fit for freelancers just starting out.</p></div>
+        </div>
+        <div class="faq-item fade-in">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            What platforms do you run ads on?
+            <span class="faq-chevron"><svg viewBox="0 0 12 8"><path d="M1 1l5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <div class="faq-a"><p>Primarily Meta (Facebook & Instagram) and Google Search. Depending on your ideal client profile we may also use LinkedIn. We recommend a minimum monthly ad spend of $2,500 to generate meaningful volume. We manage everything end-to-end.</p></div>
+        </div>
+        <div class="faq-item fade-in">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            How long before I see results?
+            <span class="faq-chevron"><svg viewBox="0 0 12 8"><path d="M1 1l5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <div class="faq-a"><p>Most agencies see their first qualified calls within 2–3 weeks of campaign launch. The first 30 days are our testing phase where we find winning creative and audience combinations. By day 45–60 we're in scale mode. Your pipeline looks completely different by month 3.</p></div>
+        </div>
+        <div class="faq-item fade-in">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            What does it cost?
+            <span class="faq-chevron"><svg viewBox="0 0 12 8"><path d="M1 1l5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <div class="faq-a"><p>Our management fee is in addition to your ad spend budget. Pricing is discussed on the strategy call because it depends on your target market, geography, and growth goals. What we can say: every client who stays with us for 90+ days generates positive ROI on both ad spend and management fee combined.</p></div>
+        </div>
+        <div class="faq-item fade-in">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Do you offer a guarantee?
+            <span class="faq-chevron"><svg viewBox="0 0 12 8"><path d="M1 1l5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <div class="faq-a"><p>Yes. If we don't deliver a minimum number of qualified discovery calls as agreed in your onboarding contract within the first 60 days, we work for free until we do. We put our fee on the line — not yours.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="cta-section" style="padding-top:60px">
+    <div class="container">
+      <div class="fade-in">
+        <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.1em;font-weight:600">Last Chance</p>
+        <h2>Only <em id="final-spots">3 Spots</em> Left for June</h2>
+        <p>We close new applications when we hit capacity. Once spots fill, the next opening is 4–6 weeks away.</p>
+        <a href="apply.html" class="btn-primary" style="font-size:1.1rem;padding:20px 52px">Claim Your Spot Before They're Gone →</a>
+        <div class="guarantee-note" style="margin-top:16px">
+          <svg viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+          &nbsp;30-min call · Zero pressure · We'll tell you if we're not the right fit
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 AdvertisingCo. All rights reserved. &nbsp;·&nbsp; <a href="#">Privacy Policy</a> &nbsp;·&nbsp; <a href="#">Terms</a></p>
+    <p style="margin-top:8px">Results shown are from real clients. Individual results vary based on ad spend, market, and offer quality.</p>
+  </footer>
+
+  <!-- STICKY BAR -->
+  <div class="sticky-bar" id="sticky-bar">
+    <div class="sticky-bar-text"><strong>June spots filling fast</strong> — only <strong>3 left</strong></div>
+    <div class="sticky-countdown" id="sticky-countdown"></div>
+    <a href="apply.html" class="btn-primary" style="padding:10px 22px;font-size:0.875rem;white-space:nowrap">Apply Now →</a>
+  </div>
+
+  <!-- EXIT POPUP -->
+  <div class="exit-overlay" id="exit-overlay">
+    <div class="exit-modal">
+      <button class="exit-close" onclick="closeExit()">✕</button>
+      <div style="font-size:2.5rem;margin-bottom:12px">⏳</div>
+      <h3>Wait — Before You Leave</h3>
+      <p>We're offering a <strong style="color:var(--accent)">free 30-minute pipeline audit</strong> to the next 3 email agencies who apply this week. We'll show you exactly where your leads are coming from (and where they should be).</p>
+      <a href="apply.html" class="btn-primary" onclick="closeExit()">Get My Free Pipeline Audit →</a>
+      <p class="exit-dismiss" onclick="closeExit()">No thanks, I don't need more clients</p>
     </div>
   </div>
-</section>
 
-
-<!-- ══════════════════════════════════════════════════════════
-     MATERIAL STORIES — texture close-ups (TOV inspired)
-══════════════════════════════════════════════════════════ -->
-<section class="materials-section" aria-labelledby="materials-heading">
-  <div class="container">
-
-    <div class="section-header reveal">
-      <div>
-        <span class="label label--accent" style="display:block;margin-bottom:12px;">— The substance of things</span>
-        <h2 class="section-title" id="materials-heading">Materials &amp; Craft</h2>
-      </div>
-    </div>
-
-    <div class="materials-grid">
-
-      <div class="material-tile reveal">
-        <div class="material-tile-img">
-          <img src="https://images.unsplash.com/photo-1565374392748-bf7ed58dfb6b?w=800&q=82&auto=format&fit=crop"
-               alt="Close-up of hand-finished solid walnut wood grain" loading="lazy" />
-        </div>
-        <div class="material-tile-caption">
-          <span class="material-tile-name">Walnut.</span>
-          <p class="material-tile-desc">Sustainably harvested, slow-dried, hand-finished. The warmest hardwood in our palette.</p>
-        </div>
-      </div>
-
-      <div class="material-tile reveal reveal-d1">
-        <div class="material-tile-img">
-          <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=800&q=82&auto=format&fit=crop"
-               alt="Close-up of natural Belgian linen upholstery texture" loading="lazy" />
-        </div>
-        <div class="material-tile-caption">
-          <span class="material-tile-name">Linen.</span>
-          <p class="material-tile-desc">Belgian and Irish linens selected for weight, drape, and their ability to age gracefully.</p>
-        </div>
-      </div>
-
-      <div class="material-tile reveal reveal-d2">
-        <div class="material-tile-img">
-          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=82&auto=format&fit=crop"
-               alt="Close-up of hand-stitched full-grain saddle leather" loading="lazy" />
-        </div>
-        <div class="material-tile-caption">
-          <span class="material-tile-name">Leather.</span>
-          <p class="material-tile-desc">Full-grain, vegetable-tanned hides. Hand-stitched, not stapled. Better at forty than at four.</p>
-        </div>
-      </div>
-
-    </div>
+  <!-- SOCIAL PROOF TOAST -->
+  <div class="proof-toast" id="proof-toast">
+    <span class="toast-dot"></span>
+    <span id="toast-text">Someone just applied from Austin, TX</span>
   </div>
-</section>
 
-
-<!-- ══════════════════════════════════════════════════════════
-     LIFESTYLE MOMENT — full-bleed (TOV inspired)
-══════════════════════════════════════════════════════════ -->
-<section class="lifestyle-section" aria-label="Lifestyle">
-  <img src="https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?w=2400&q=85&auto=format&fit=crop&crop=center"
-       alt="Alabis-furnished Nigerian living room at golden hour — a complete room composition" />
-  <div class="lifestyle-overlay" aria-hidden="true"></div>
-  <div class="lifestyle-content">
-    <p class="lifestyle-headline">
-      Made in<br/>
-      Nigeria.<br/>
-      <em style="font-style:normal;color:var(--accent-light);">Made to last.</em>
-    </p>
-    <a href="#collections" class="btn btn--outline-light">
-      Shop the Look
-      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-    </a>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════════════════════
-     TESTIMONIALS — minimal, no cards (Aesop inspired)
-══════════════════════════════════════════════════════════ -->
-<section class="testimonials-section" aria-labelledby="testimonials-heading">
-  <div class="container">
-
-    <div class="section-header reveal">
-      <div>
-        <span class="label" style="display:block;margin-bottom:12px;">— Client voices</span>
-        <h2 class="section-title" id="testimonials-heading">What our<br/><em style="font-style:italic;">patrons say</em></h2>
-      </div>
-    </div>
-
-    <div class="testimonials-grid">
-
-      <figure class="testimonial reveal">
-        <p class="testimonial-mark" aria-hidden="true">"</p>
-        <blockquote>
-          <p class="testimonial-quote">
-            The Meridian Sectional has completely transformed our living room. The quality is beyond anything we expected from any brand — Nigerian or otherwise. This is furniture that will outlast us.
-          </p>
-        </blockquote>
-        <div class="testimonial-divider" aria-hidden="true"></div>
-        <figcaption>
-          <p class="testimonial-author">Adaeze Okonkwo</p>
-          <p class="testimonial-loc">Lagos, Nigeria</p>
-        </figcaption>
-      </figure>
-
-      <figure class="testimonial reveal reveal-d1">
-        <p class="testimonial-mark" aria-hidden="true">"</p>
-        <blockquote>
-          <p class="testimonial-quote">
-            White-glove delivery, immaculate packaging, and a piece that looked even more beautiful in person. Alabis operates at a level that most international furniture brands would struggle to match.
-          </p>
-        </blockquote>
-        <div class="testimonial-divider" aria-hidden="true"></div>
-        <figcaption>
-          <p class="testimonial-author">Kolade Fashola</p>
-          <p class="testimonial-loc">Abuja, Nigeria</p>
-        </figcaption>
-      </figure>
-
-      <figure class="testimonial reveal reveal-d2">
-        <p class="testimonial-mark" aria-hidden="true">"</p>
-        <blockquote>
-          <p class="testimonial-quote">
-            We furnished our entire executive suite through Alabis. Three years on, not a scratch, not a creak. When clients ask where we sourced our furniture, the answer never fails to impress.
-          </p>
-        </blockquote>
-        <div class="testimonial-divider" aria-hidden="true"></div>
-        <figcaption>
-          <p class="testimonial-author">Titilayo Bankole</p>
-          <p class="testimonial-loc">Port Harcourt, Nigeria</p>
-        </figcaption>
-      </figure>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════════════════════
-     JOURNAL — editorial blog (Taeillo inspired)
-══════════════════════════════════════════════════════════ -->
-<section id="journal" class="journal-section" aria-labelledby="journal-heading">
-  <div class="container">
-
-    <div class="section-header reveal">
-      <div>
-        <span class="label label--accent" style="display:block;margin-bottom:12px;">— Ideas &amp; Inspiration</span>
-        <h2 class="section-title" id="journal-heading">The Journal</h2>
-      </div>
-      <a href="#" class="btn btn--ghost reveal reveal-d2">
-        <span>Read all stories</span>
-        <span class="arrow" aria-hidden="true"></span>
-      </a>
-    </div>
-
-    <div class="journal-grid">
-
-      <article class="journal-card reveal">
-        <div class="journal-card-img">
-          <img src="https://images.unsplash.com/photo-1618219740975-d40978bb7378?w=800&q=82&auto=format&fit=crop"
-               alt="A beautifully layered living room interior demonstrating the concept of warm minimalism"
-               loading="lazy" />
-        </div>
-        <p class="journal-card-cat label label--accent">Design</p>
-        <h3 class="journal-card-title">The Case for Warm Minimalism in the Nigerian Home</h3>
-        <p class="journal-card-excerpt">Why "less is more" only works when the less you have is extraordinary — and how to select pieces that hold a room.</p>
-        <a href="#" class="btn btn--ghost">
-          <span>Read story</span>
-          <span class="arrow" aria-hidden="true"></span>
-        </a>
-      </article>
-
-      <article class="journal-card reveal reveal-d1">
-        <div class="journal-card-img">
-          <img src="https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=800&q=82&auto=format&fit=crop"
-               alt="Hands of an Alabis craftsman working on the joinery of a dining table"
-               loading="lazy" />
-        </div>
-        <p class="journal-card-cat label label--accent">Craftsmanship</p>
-        <h3 class="journal-card-title">Eight Weeks with a Single Dining Table: Our Making Process</h3>
-        <p class="journal-card-excerpt">A behind-the-scenes look at what happens between the first sketch and the final delivery — and why we refuse to rush it.</p>
-        <a href="#" class="btn btn--ghost">
-          <span>Read story</span>
-          <span class="arrow" aria-hidden="true"></span>
-        </a>
-      </article>
-
-      <article class="journal-card reveal reveal-d2">
-        <div class="journal-card-img">
-          <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=800&q=82&auto=format&fit=crop"
-               alt="Detail of natural linen upholstery fabric texture in afternoon light"
-               loading="lazy" />
-        </div>
-        <p class="journal-card-cat label label--accent">Materials</p>
-        <h3 class="journal-card-title">Why We Use Linen, and Why You Should Care</h3>
-        <p class="journal-card-excerpt">The case for natural fibres in a world full of performance fabrics — and how linen gets better every year it's lived with.</p>
-        <a href="#" class="btn btn--ghost">
-          <span>Read story</span>
-          <span class="arrow" aria-hidden="true"></span>
-        </a>
-      </article>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════════════════════
-     SERVICES STRIP — Aesop-style icon grid
-══════════════════════════════════════════════════════════ -->
-<section class="services-section" aria-label="Our services">
-  <div class="container">
-    <div class="services-grid">
-
-      <div class="service-item reveal">
-        <svg class="service-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-        <p class="service-name">White-Glove Delivery</p>
-        <p class="service-desc">Careful installation by our own team, nationwide across Nigeria.</p>
-      </div>
-
-      <div class="service-item reveal reveal-d1">
-        <svg class="service-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <p class="service-name">10-Year Warranty</p>
-        <p class="service-desc">Full structural guarantee on every piece we make.</p>
-      </div>
-
-      <div class="service-item reveal reveal-d2">
-        <svg class="service-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        <p class="service-name">Bespoke Orders</p>
-        <p class="service-desc">Custom dimensions, materials, and finishes. Nothing is impossible.</p>
-      </div>
-
-      <div class="service-item reveal reveal-d3">
-        <svg class="service-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        <p class="service-name">Showroom Visit</p>
-        <p class="service-desc">By appointment. Experience every material and finish in our Lagos showroom.</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════════════════════
-     NEWSLETTER — Aesop-style minimal
-══════════════════════════════════════════════════════════ -->
-<section class="newsletter-section" aria-labelledby="newsletter-heading">
-  <div class="container">
-    <div class="newsletter-inner reveal">
-      <span class="label" style="display:block;margin-bottom:20px;">— The Alabis Letter</span>
-      <h2 class="newsletter-headline" id="newsletter-heading">
-        The Art of<br/>
-        <em style="font-style:italic;">Living Well</em>
-      </h2>
-      <p class="newsletter-subtext">
-        New collections, design thinking, and exclusive access to bespoke commissions. Sent once a month. Never more.
-      </p>
-      <form class="newsletter-form" aria-label="Newsletter signup">
-        <label for="nl-email" class="sr-only" style="position:absolute;clip:rect(0,0,0,0);">Your email address</label>
-        <input type="email" id="nl-email" class="newsletter-input"
-               placeholder="Your email address" required
-               autocomplete="email" />
-        <button type="submit" class="newsletter-submit">Subscribe</button>
-      </form>
-      <p class="newsletter-note">No spam. Unsubscribe at any time.</p>
-    </div>
-  </div>
-</section>
-
-</main>
-
-
-<!-- ══════════════════════════════════════════════════════════
-     FOOTER
-══════════════════════════════════════════════════════════ -->
-<footer class="footer" role="contentinfo">
-  <div class="container">
-
-    <div class="footer-top">
-
-      <!-- Brand -->
-      <div>
-        <p class="footer-brand-logo">ALABIS</p>
-        <p class="footer-brand-sub">Furniture &amp; Interiors · Lagos</p>
-        <p class="footer-brand-about">
-          Heirloom furniture crafted in Nigeria. Where master artisans and rare materials meet deliberate restraint. Est. 2010.
-        </p>
-        <div class="footer-social" aria-label="Social media links">
-          <a href="#" aria-label="Alabis on Instagram">
-            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-          </a>
-          <a href="#" aria-label="Alabis on Pinterest">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.98.03-2.83l1.26-5.33s-.32-.64-.32-1.59c0-1.49.86-2.6 1.93-2.6.91 0 1.35.68 1.35 1.5 0 .91-.58 2.28-.88 3.55-.25 1.06.53 1.92 1.57 1.92 1.88 0 3.14-2.43 3.14-5.32 0-2.19-1.48-3.73-3.6-3.73-2.45 0-3.89 1.84-3.89 3.74 0 .74.28 1.53.64 1.96a.26.26 0 0 1 .06.25l-.24.97c-.04.15-.13.18-.3.11-1.12-.52-1.82-2.16-1.82-3.48 0-2.83 2.06-5.43 5.93-5.43 3.11 0 5.53 2.22 5.53 5.19 0 3.1-1.95 5.59-4.66 5.59-.91 0-1.76-.47-2.05-1.03l-.56 2.08c-.2.78-.75 1.76-1.12 2.36.85.26 1.75.4 2.68.4 5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
-          </a>
-          <a href="#" aria-label="Alabis on X">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.742l7.725-8.836L2.126 2.25H8.05l4.261 5.636L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <!-- Shop -->
-      <div>
-        <p class="footer-col-title">Shop</p>
-        <ul class="footer-links" role="list">
-          <li><a href="#">Living Room</a></li>
-          <li><a href="#">Bedroom</a></li>
-          <li><a href="#">Dining Room</a></li>
-          <li><a href="#">Home Office</a></li>
-          <li><a href="#">Outdoor</a></li>
-          <li><a href="#">New Arrivals</a></li>
-          <li><a href="#">Sale</a></li>
-        </ul>
-      </div>
-
-      <!-- Services -->
-      <div>
-        <p class="footer-col-title">Services</p>
-        <ul class="footer-links" role="list">
-          <li><a href="#">Bespoke Orders</a></li>
-          <li><a href="#">Interior Consultation</a></li>
-          <li><a href="#">Trade Programme</a></li>
-          <li><a href="#">Showroom Visit</a></li>
-          <li><a href="#">Gift Cards</a></li>
-          <li><a href="#">Delivery &amp; Returns</a></li>
-        </ul>
-      </div>
-
-      <!-- Company -->
-      <div>
-        <p class="footer-col-title">Company</p>
-        <ul class="footer-links" role="list">
-          <li><a href="#">Our Story</a></li>
-          <li><a href="#">The Atelier</a></li>
-          <li><a href="#">Sustainability</a></li>
-          <li><a href="#">The Journal</a></li>
-          <li><a href="#">Press</a></li>
-          <li><a href="#">Contact Us</a></li>
-        </ul>
-      </div>
-
-    </div>
-
-    <div class="footer-bottom">
-      <p class="footer-copy">&copy; 2025 Alabis Furniture Ltd. All rights reserved. Lagos, Nigeria.</p>
-      <nav class="footer-legal" aria-label="Legal links">
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
-        <a href="#">Cookies</a>
-      </nav>
-    </div>
-
-  </div>
-</footer>
-
-
-<!-- ══════════════════════════════════════════════════════════
-     JAVASCRIPT
-══════════════════════════════════════════════════════════ -->
-<script>
-  // ── Scroll-aware navbar
-  const nav = document.getElementById('nav');
-  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 32);
-  window.addEventListener('scroll', onScroll, { passive: true });
-
-  // ── Hero image zoom on load
-  const heroImg = document.getElementById('hero-img');
-  if (heroImg) {
-    heroImg.addEventListener('load', () => heroImg.classList.add('loaded'));
-    if (heroImg.complete) heroImg.classList.add('loaded');
-  }
-
-  // ── Show wishlist icon on desktop (≥768px)
-  const navWish = document.getElementById('nav-wish');
-  if (navWish && window.matchMedia('(min-width: 768px)').matches) {
-    navWish.style.display = 'flex';
-  }
-
-  // ── Mobile hamburger menu
-  const hamburger = document.getElementById('hamburger');
-  const mobileNav = document.getElementById('mobile-nav');
-  const hamburgerIcon = document.getElementById('hamburger-icon');
-
-  if (hamburger && mobileNav) {
-    hamburger.addEventListener('click', () => {
-      const isOpen = mobileNav.classList.toggle('open');
-      hamburger.setAttribute('aria-expanded', String(isOpen));
-      mobileNav.setAttribute('aria-hidden', String(!isOpen));
-      hamburger.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
-      // Swap icon: hamburger ↔ X
-      hamburgerIcon.innerHTML = isOpen
-        ? '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>'
-        : '<line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="17" x2="21" y2="17"/>';
-      // Prevent body scroll when menu is open
-      document.body.style.overflow = isOpen ? 'hidden' : '';
-    });
-
-    // Close mobile nav when a link is clicked
-    mobileNav.querySelectorAll('.mobile-nav-link').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileNav.classList.remove('open');
-        hamburger.setAttribute('aria-expanded', 'false');
-        mobileNav.setAttribute('aria-hidden', 'true');
-        hamburger.setAttribute('aria-label', 'Open menu');
-        hamburgerIcon.innerHTML = '<line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="17" x2="21" y2="17"/>';
-        document.body.style.overflow = '';
-      });
-    });
-
-    // Close on Escape
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && mobileNav.classList.contains('open')) {
-        mobileNav.classList.remove('open');
-        hamburger.setAttribute('aria-expanded', 'false');
-        mobileNav.setAttribute('aria-hidden', 'true');
-        hamburger.setAttribute('aria-label', 'Open menu');
-        hamburgerIcon.innerHTML = '<line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="17" x2="21" y2="17"/>';
-        document.body.style.overflow = '';
-        hamburger.focus();
+  <script>
+    /* ── COUNTDOWN TIMER (evergreen 24h) ─────── */
+    (function() {
+      const KEY = 'adco_deadline';
+      let deadline = localStorage.getItem(KEY);
+      if (!deadline || isNaN(deadline)) {
+        deadline = Date.now() + 24 * 60 * 60 * 1000;
+        localStorage.setItem(KEY, deadline);
       }
-    });
-  }
-
-  // ── Scroll reveal with IntersectionObserver
-  const reveals = document.querySelectorAll('.reveal');
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('in');
-        revealObserver.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-  reveals.forEach(el => revealObserver.observe(el));
-
-  // ── Product category filter with aria-pressed
-  const filterBtns = document.querySelectorAll('.filter-btn');
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach(b => {
-        b.classList.remove('active');
-        b.setAttribute('aria-pressed', 'false');
-      });
-      btn.classList.add('active');
-      btn.setAttribute('aria-pressed', 'true');
-    });
-  });
-
-  // ── Keyboard activation for col-cards (Enter / Space)
-  document.querySelectorAll('.col-card[role="button"]').forEach(card => {
-    card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        const link = card.querySelector('.col-card-link');
-        if (link) link.click();
-      }
-    });
-  });
-
-  // ── Keyboard activation for product-card articles (Enter)
-  document.querySelectorAll('.product-card').forEach(card => {
-    card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        const atcBtn = card.querySelector('.atc-btn');
-        if (atcBtn) {
-          atcBtn.click();
-          const feedback = document.createElement('span');
-          feedback.className = 'sr-only';
-          feedback.setAttribute('role', 'status');
-          feedback.textContent = 'Added to cart';
-          card.appendChild(feedback);
-          setTimeout(() => feedback.remove(), 2000);
+      function update() {
+        const left = parseInt(deadline) - Date.now();
+        if (left <= 0) {
+          document.getElementById('c-hours').textContent = '00';
+          document.getElementById('c-mins').textContent = '00';
+          document.getElementById('c-secs').textContent = '00';
+          return;
         }
+        const h = String(Math.floor(left / 3600000)).padStart(2, '0');
+        const m = String(Math.floor((left % 3600000) / 60000)).padStart(2, '0');
+        const s = String(Math.floor((left % 60000) / 1000)).padStart(2, '0');
+        document.getElementById('c-hours').textContent = h;
+        document.getElementById('c-mins').textContent = m;
+        document.getElementById('c-secs').textContent = s;
+        document.getElementById('sticky-countdown').innerHTML =
+          `<span>${h}</span>:<span>${m}</span>:<span>${s}</span>`;
+      }
+      update();
+      setInterval(update, 1000);
+    })();
+
+    /* ── STICKY BAR ──────────────────────────── */
+    const hero = document.getElementById('hero');
+    const bar  = document.getElementById('sticky-bar');
+    const obs  = new IntersectionObserver(([e]) => {
+      bar.classList.toggle('visible', !e.isIntersecting);
+    }, { threshold: 0 });
+    obs.observe(hero);
+
+    /* ── SCROLL FADE-IN ──────────────────────── */
+    const fadeEls = document.querySelectorAll('.fade-in');
+    const fadeObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    fadeEls.forEach(el => fadeObs.observe(el));
+
+    /* ── EXIT INTENT ─────────────────────────── */
+    let exitShown = sessionStorage.getItem('exit_shown');
+    document.addEventListener('mouseout', (e) => {
+      if (e.clientY < 0 && !exitShown) {
+        document.getElementById('exit-overlay').classList.add('active');
+        exitShown = true;
+        sessionStorage.setItem('exit_shown', 'true');
       }
     });
-  });
+    function closeExit() {
+      document.getElementById('exit-overlay').classList.remove('active');
+    }
 
-  // ── Newsletter with loading state
-  const nlForm = document.querySelector('.newsletter-form');
-  if (nlForm) {
-    nlForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const submitBtn = nlForm.querySelector('.newsletter-submit');
-      const input = nlForm.querySelector('.newsletter-input');
-      submitBtn.textContent = 'Subscribing…';
-      submitBtn.disabled = true;
-      input.disabled = true;
-      // Simulate async
-      setTimeout(() => {
-        submitBtn.textContent = 'Subscribed ✓';
-        submitBtn.style.background = 'var(--accent)';
-        setTimeout(() => {
-          submitBtn.textContent = 'Subscribe';
-          submitBtn.disabled = false;
-          submitBtn.style.background = '';
-          input.disabled = false;
-          nlForm.reset();
-        }, 3000);
-      }, 800);
-    });
-  }
+    /* ── SOCIAL PROOF TOASTS ─────────────────── */
+    const toasts = [
+      'Alex from London just applied',
+      'Someone in Sydney just booked a call',
+      'Maria from Toronto just applied',
+      'A Klaviyo agency from NYC just applied',
+      'Jake from Austin just claimed a spot',
+      'An email agency from Dubai just applied',
+    ];
+    let ti = 0;
+    function showToast() {
+      const el = document.getElementById('proof-toast');
+      document.getElementById('toast-text').textContent = toasts[ti % toasts.length];
+      ti++;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 4500);
+    }
+    setTimeout(showToast, 8000);
+    setInterval(showToast, 18000);
 
-  // ── Active nav link: highlight based on scroll position
-  const sections = ['collections', 'new-arrivals', 'craftsmanship', 'journal'];
-  const navLinkMap = {};
-  sections.forEach(id => {
-    const link = document.querySelector(`.nav-links a[href="#${id}"]`);
-    const el = document.getElementById(id);
-    if (link && el) navLinkMap[id] = { link, el };
-  });
+    /* ── FAQ ACCORDION ───────────────────────── */
+    function toggleFaq(btn) {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    }
 
-  const activeSectionObserver = new IntersectionObserver((entries) => {
-    entries.forEach(({ target, isIntersecting }) => {
-      const id = target.getAttribute('id');
-      const entry = navLinkMap[id];
-      if (!entry) return;
-      if (isIntersecting) entry.link.classList.add('active');
-      else entry.link.classList.remove('active');
-    });
-  }, { rootMargin: '-30% 0px -60% 0px' });
-
-  Object.values(navLinkMap).forEach(({ el }) => activeSectionObserver.observe(el));
-</script>
-
+    /* ── VIDEO PLAY ──────────────────────────── */
+    function handleVideoPlay() {
+      const wrapper = document.querySelector('.video-wrapper');
+      wrapper.innerHTML = `<iframe style="width:100%;height:100%;position:absolute;inset:0;border:none" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+    }
+  </script>
 </body>
 </html>
