@@ -1,0 +1,98 @@
+/*
+  Passive Income 101 replay pages: background classes
+  Self-contained (no variables needed). Add a class to any section/div.
+
+  Page backgrounds
+    .bg-replay         Replay page hero: top-centre glow + fading grid
+    .bg-expired        Expired page hero: right-side glow + fading grid
+    .bg-footer         Footer band
+
+  Surface backgrounds
+    .bg-panel          Countdown bar / "If you haven't done so already…" panel
+    .bg-video          Video player placeholder (wrap it in .bg-video-frame for the glowing edge)
+    .bg-video-frame    1px gradient border around the video
+    .bg-ended          Locked "Replay ended" frame on the expired page
+*/
+
+/* ---------- Page backgrounds ---------- */
+
+.bg-replay {
+  position: relative;
+  overflow: hidden;
+  background-color: #011428;
+  background-image:
+    radial-gradient(1100px 620px at 50% -120px, rgba(29, 95, 180, 0.55), transparent 70%),
+    radial-gradient(900px 500px at 50% 62%, rgba(14, 71, 145, 0.35), transparent 70%),
+    linear-gradient(180deg, #03224A 0%, #011428 75%);
+}
+.bg-replay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(232, 240, 251, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232, 240, 251, 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 20%, #000 20%, transparent 75%);
+          mask-image: radial-gradient(ellipse 70% 55% at 50% 20%, #000 20%, transparent 75%);
+}
+
+.bg-expired {
+  position: relative;
+  overflow: hidden;
+  background-color: #011428;
+  background-image:
+    radial-gradient(900px 700px at 85% 40%, rgba(29, 95, 180, 0.45), transparent 70%),
+    radial-gradient(700px 500px at 0% 0%, rgba(14, 71, 145, 0.35), transparent 70%),
+    linear-gradient(180deg, #03224A 0%, #011428 85%);
+}
+.bg-expired::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(232, 240, 251, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232, 240, 251, 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 55% 60% at 78% 45%, #000 15%, transparent 75%);
+          mask-image: radial-gradient(ellipse 55% 60% at 78% 45%, #000 15%, transparent 75%);
+}
+
+/* Keep content above the grid overlay */
+.bg-replay > *,
+.bg-expired > * {
+  position: relative;
+  z-index: 1;
+}
+
+.bg-footer {
+  background: #021B36;
+  border-top: 1px solid rgba(232, 240, 251, 0.12);
+}
+
+/* ---------- Surface backgrounds ---------- */
+
+.bg-panel {
+  background: linear-gradient(180deg, rgba(4, 42, 82, 0.9), rgba(2, 27, 54, 0.9));
+  border: 1px solid rgba(232, 240, 251, 0.12);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.bg-video-frame {
+  padding: 1px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(141, 180, 234, 0.6), rgba(141, 180, 234, 0.06) 70%);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+}
+
+.bg-video {
+  border-radius: 23px;
+  background: radial-gradient(circle at 50% 45%, #0B3D7A 0%, #042A52 45%, #021B36 100%);
+}
+
+.bg-ended {
+  border-radius: 21px;
+  background: radial-gradient(circle at 50% 45%, #0A3466, #021B36 75%);
+}
